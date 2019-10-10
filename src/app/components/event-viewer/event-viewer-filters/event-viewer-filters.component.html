@@ -1,0 +1,31 @@
+<!-- Search -->
+<input nz-input placeholder="Search Message" [(ngModel)]="filters.searchTerm" />
+
+<!-- Event Type Dropdown -->
+<nz-select
+      [nzMaxTagCount]="3"
+      [nzMaxTagPlaceholder]="tagPlaceHolder"
+      style="width: 100%"
+      nzMode="multiple"
+      nzPlaceHolder="Event Level"
+      [(ngModel)]="filters.eventEntryTypes"
+    >
+    <nz-option *ngFor="let option of eventLevels" nzCustomContent [nzLabel]="option" [nzValue]="option">
+        <event-icon [eventType]="option"></event-icon>{{option}}
+    </nz-option>
+</nz-select>
+<ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
+
+<!-- Dates -->
+<nz-date-picker
+      nzShowTime
+      nzFormat="yyyy-MM-dd HH:mm:ss"
+      [(ngModel)]="filters.dateFrom"
+      nzPlaceHolder="Date From"
+></nz-date-picker>
+<nz-date-picker
+      nzShowTime
+      nzFormat="yyyy-MM-dd HH:mm:ss"
+      [(ngModel)]="filters.dateTo"
+      nzPlaceHolder="Date To"
+></nz-date-picker>

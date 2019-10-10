@@ -1,0 +1,19 @@
+<nz-input-group [nzSuffix]="suffixIconSearch">
+    <input type="text" nz-input placeholder="search" id="searchInput"/>
+</nz-input-group>
+    <ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+</ng-template>
+
+<nz-list
+    [nzDataSource]="logers"
+    nzBordered
+    nzSize="large"
+    [nzRenderItem]="itemRef"
+    [nzLoading]="loading"
+>
+    <ng-template #itemRef let-item>
+        <li nz-list-item [nzActions]="[opAction]" [nzContent]="item.log + ' ('+ item.entries +')'" nzNoFlex></li>
+        <ng-template #opAction><a (click)="onItemSelected(item)">select</a></ng-template>
+    </ng-template>
+</nz-list>

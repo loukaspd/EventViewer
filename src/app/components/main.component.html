@@ -1,0 +1,19 @@
+<button class="fab-button" (click)="onAddClicked()" nz-button nzType="primary" [nzSize]="'large'" nzShape="circle">
+  <i nz-icon nzType="plus"></i>
+</button>
+
+<nz-tabset [nzType]="'card'" [(nzSelectedIndex)]="activeIndex">
+  <nz-tab *ngFor="let tab of tabs; let i = index" [nzTitle]="titleTemplate">
+    <ng-template #titleTemplate>
+      <div>
+        <nz-badge nzDot *ngIf="tabsWithNewContent[i]">{{ tab.log }}</nz-badge>
+        {{ tabsWithNewContent[i] ? '' : tab.log }}
+        <i nz-icon nzType="close" class="ant-tabs-close-x" (click)="closeTab(i)"></i>
+      </div>
+    </ng-template>
+    <event-viewer
+    [eventViewerName]="tab.log"
+    (unreadEventsUpdated)="tabsWithNewContent[i]=$event"
+    ></event-viewer>
+  </nz-tab>
+</nz-tabset>

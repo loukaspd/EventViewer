@@ -1,0 +1,47 @@
+<nz-layout>
+    <nz-sider>
+        <event-viewer-filters></event-viewer-filters>
+    </nz-sider>
+    
+    
+    <nz-content>
+    <!-- Refersh Button -->
+    <div *ngIf="!!newEvents.length" style="margin-left:5px; margin-bottom: 10px;">
+        <button (click)="onRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+            <i nz-icon nzType="issues-close"></i>
+        </button>
+    </div>
+    
+    
+    
+    <!-- Main List-->
+    <nz-collapse>
+        <nz-collapse-panel *ngFor="let event of events"
+            [nzHeader]="collapseHeader"
+        >
+    
+        <ng-template #collapseHeader>
+            <div>
+            <!-- icon -->
+            <event-icon [eventType]="event.EntryType"></event-icon>
+    
+            {{event.TimeGenerated | date: 'd/M HH:mm:ss'}}
+            </div>
+        </ng-template>
+    
+            <p style="white-space: pre-wrap;">{{event.Message}}</p>
+        </nz-collapse-panel>
+    </nz-collapse>
+    
+    <!-- Loaders & NoResults -->
+    <nz-spin class="loader" *ngIf="loading" nzTip="Loading..." nzSimple [nzSize]="'large'"></nz-spin>
+    
+    <nz-empty *ngIf="!loading && events.length == 0"
+        [nzNotFoundContent]="emptyContent">
+        <ng-template #emptyContent>
+            <span>No Events</span>
+        </ng-template>
+    </nz-empty>
+    </nz-content>
+</nz-layout>
+

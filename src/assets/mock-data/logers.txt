@@ -1,0 +1,12 @@
+Max(K) Retain OverflowAction        Entries Log                                                                      
+------ ------ --------------        ------- ---                                                                      
+20,480      0 OverwriteAsNeeded      32,864 Application                                                              
+20,480      0 OverwriteAsNeeded           0 HardwareEvents                                                           
+   512      7 OverwriteOlder              0 Internet Explorer                                                        
+20,480      0 OverwriteAsNeeded           0 Key Management Service                                                   
+   128      0 OverwriteAsNeeded           2 OAlerts                                                                  
+                                            Security                                                                 
+20,480      0 OverwriteAsNeeded       8,765 System                                                                   
+   512      7 OverwriteOlder             20 Test                                                                     
+   512      7 OverwriteOlder              0 Windows Azure                                                            
+15,360      0 OverwriteAsNeeded       3,988 Windows PowerShell     
