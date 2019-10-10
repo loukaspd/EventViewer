@@ -1,4 +1,5 @@
 import { app, BrowserWindow, screen } from 'electron';
+import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -60,7 +61,10 @@ try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
+  app.on('ready', () => {
+    createWindow();
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {

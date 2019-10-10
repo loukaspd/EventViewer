@@ -1,7 +1,11 @@
 {
   "name": "event-viewer-pp",
   "version": "0.0.1",
-  "homepage": "https://github.com/loukaspd/EventViewer",
+  "repository": {
+    "type":"git",
+    "url":"https://github.com/loukaspd/EventViewer.git"
+  },
+  "license" : "SEE LICENSE IN LICENSE",
   "description": "EventViewer++",
   "author": {
     "name": "loukaspd",
@@ -21,10 +25,8 @@
     "ng:serve:web": "npm run postinstall:web && ng serve -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
-    "electron:local": "npm run build:prod && electron .",
-    "electron:linux": "npm run build:prod && electron-builder build --linux",
-    "electron:windows": "npm run build:prod && electron-builder build --windows",
-    "electron:mac": "npm run build:prod && electron-builder build --mac",
+    "electron:windows": "npm run build:prod && electron-builder build --windows --publish never",
+    "release:windows": "npm run build:prod && electron-builder build --windows --publish always",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run build:prod && mocha --timeout 300000 --require ts-node/register e2e/**/*.spec.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
@@ -78,6 +80,7 @@
     "node": ">=10.9.0"
   },
   "dependencies": {
+    "electron-updater": "^4.1.2",
     "ng-zorro-antd": "^8.3.1",
     "node-powershell": "^4.0.0"
   }
