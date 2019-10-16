@@ -4,7 +4,7 @@ import { EventLog } from '../../types/EventLog';
 import { Event } from '../../types/Event';
 import { Observable } from 'rxjs';
 import { PowershellMonitor } from './powershell-monitor';
-import { GlobalUtils } from '../global-utils';
+import { PowershellCommands } from './powershell-commands';
 
 @Injectable({
     providedIn: 'root'
@@ -26,20 +26,14 @@ export class PowershellService {
     //#region Public Api
 
     public getEventLogs(): Promise<EventLog[]> {
-        const commandPromise = this.ps.addCommand('Get-EventLog -List')
-        .then(() => this.ps.invoke());
+        return PowershellCommands.getEventLogs((command:string) => this._commandExecutor(command));
+    }
 
-        return Promise.race<any>([commandPromise, GlobalUtils.timeoutPromise(3000)])  //stop execution if it does more than 3 seconds
-        .then(output => {
-            if (output == null) {
-                console.log('command tool more than 3 seconds');
-                this._initShell();
-                return this.getEventLogs();
-            }
-            return this.parseEventViewersList(output)
-        })
-        .catch(error => {
-            console.log(error);
+    private _commandExecutor(command:string): Promise<string> {
+        return this.ps.addCommand(command)
+        .then(() => this.ps.invoke())
+        .catch(e => {
+            console.log(e);
             this._initShell();
             return [];
         });
@@ -62,28 +56,4 @@ export class PowershellService {
         return this._monitors.get(eventViewerName).allLogs.slice();
     }
     //#endregion Public Api
-
-
-    //#region Helpers
-
-    private parseEventViewersList(output: string): EventLog[] {
-        const regex = /\S*\s+\d+\s+\D+\s+([\d|,]+)\s+(.*)/s;
-
-
-        return output.split(/\r?\n/)    //get each line
-        .slice(3)                       //remove titles
-        .map(line => line.trim())       //trim lines
-        .filter(line => regex.test(line))
-        .map(line => {
-            const eventLog = new EventLog();
-            
-            let match = regex.exec(line);
-            eventLog.log = match[2];
-            eventLog.entries = Number(match[1].replace(',','').replace('.',''));
-            
-            return eventLog;
-        });
-    }
-
-    //#endregio Helpers
 }

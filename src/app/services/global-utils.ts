@@ -9,4 +9,8 @@ export class GlobalUtils {
             setTimeout(() => res(null), milli);
         });
     }
+
+    public static splitLines(input:string): string[] {
+        return input.split(/\r?\n/);
+    }
 }

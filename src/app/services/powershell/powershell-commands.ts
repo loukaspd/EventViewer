@@ -1,11 +1,41 @@
 import { Event } from "../../types/Event";
+import { EventLog } from "../../types/EventLog";
+import { GlobalUtils } from "../global-utils";
 
 export class PowershellCommands {
+
+    //#region Event Log
+    public static getEventLogs(commandExecutor: (command:string) => Promise<string>): Promise<EventLog[]> {
+        return commandExecutor('Get-EventLog -List')
+        .then(output => PowershellCommands._parseEventViewersList(output));
+    }
+    
+    private static _parseEventViewersList(output: string): EventLog[] {
+        const regex = /\S*\s+\d+\s+\D+\s+([\d|,]+)\s+(.*)/s;
+
+        return GlobalUtils.splitLines(output)   //get each line
+        .slice(3)                       //remove titles
+        .map(line => line.trim())       //trim lines
+        .filter(line => regex.test(line))
+        .map(line => {
+            const eventLog = new EventLog();
+            
+            let match = regex.exec(line);
+            eventLog.log = match[2];
+            eventLog.entries = Number(match[1].replace(',','').replace('.',''));
+            
+            return eventLog;
+        });
+    }
+
+    //#endregion
+
+    //#region Events
     public static selectEvent: string = ` | select-object Index,EntryType,Source,@{n='TimeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},@{n='originalTimeString';e={($_.timegenerated)}},Message`;
 
 
     public static parseEventsCommandOutput(output: string): Event[] {
-        const lines = output.split(/\r?\n/).filter(s => !!s.length);
+        const lines = GlobalUtils.splitLines(output).filter(s => !!s.length);
         return lines
         .map((e,index) => /^Index\s+:\s(\d+)/s.test(e) ? index : undefined)
         .filter(e => e!=undefined)
@@ -13,11 +43,11 @@ export class PowershellCommands {
            const start = e;
            const end = index == array.length-1 ? undefined : array[index+1];
            const elementLines = lines.slice(start,end);
-           return PowershellCommands.parseEventLogItem(elementLines);
+           return PowershellCommands._parseEventLogItem(elementLines);
         });
     }
 
-    private static parseEventLogItem(lines: string[]): Event {
+    private static _parseEventLogItem(lines: string[]): Event {
         const regex = /(\S+)\s+:\s(.*)/s;
         const eventLog = new Event();
         
@@ -41,4 +71,6 @@ export class PowershellCommands {
     }
 
     // private regex: RegExp = /^Index\s+:\s(\d+)\n^EntryType\s+:\s(\D+)\n^InstanceId\s+:\s(\d+)\n^Message\s+:\s((.|\n)+?(?=^Category))^Category\s+:\s(.+)\n^CategoryNumber\s+:\s(\d+)\n^ReplacementStrings\s+:\s((.|\n)+?(?=^Source))^Source\s+:\s(.*)\n^TimeGenerated\s+:\s(.*)\n^TimeWritten\s+:\s(.*)\n^UserName\s+:\s(.*)/mg;
+
+    //#endregion Events
 }
