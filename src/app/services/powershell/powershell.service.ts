@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import Shell from 'node-powershell'; 
+import { Injectable } from '@angular/core'; 
 import { EventLog } from '../../types/EventLog';
 import { Event } from '../../types/Event';
 import { Observable } from 'rxjs';
@@ -9,34 +8,11 @@ import { PowershellCommands } from './powershell-commands';
 @Injectable({
     providedIn: 'root'
 })
-export class PowershellService { 
-    ps: Shell;
-
-    constructor() {
-        this._initShell();
-    }
-
-    private _initShell(): void {
-        this.ps = new Shell({
-            executionPolicy: 'Bypass',
-            noProfile: true
-        });
-    }
-
+export class PowershellService {
     //#region Public Api
 
     public getEventLogs(): Promise<EventLog[]> {
-        return PowershellCommands.getEventLogs((command:string) => this._commandExecutor(command));
-    }
-
-    private _commandExecutor(command:string): Promise<string> {
-        return this.ps.addCommand(command)
-        .then(() => this.ps.invoke())
-        .catch(e => {
-            console.log(e);
-            this._initShell();
-            return '';
-        });
+        return PowershellCommands.getEventLogs();
     }
 
     private _monitors: Map<string,PowershellMonitor> = new Map();

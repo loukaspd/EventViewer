@@ -1,12 +1,13 @@
 import { Event } from "../../types/Event";
 import { EventLog } from "../../types/EventLog";
 import { GlobalUtils } from "../global-utils";
+import { PsCommandExecutor } from "./powershell-command-executor";
 
 export class PowershellCommands {
 
     //#region Event Log
-    public static getEventLogs(commandExecutor: (command:string) => Promise<string>): Promise<EventLog[]> {
-        return commandExecutor('Get-EventLog -List')
+    public static getEventLogs(): Promise<EventLog[]> {
+        return PsCommandExecutor.executeCommand('Get-EventLog -List')
         .then(output => PowershellCommands._parseEventViewersList(output));
     }
     
@@ -31,16 +32,12 @@ export class PowershellCommands {
     //#endregion
 
     //#region Events
-    public static getEvents(
-        commandExecutor: (command:string) => Promise<string>
-        ,eventLog: string
-        ,after: string) 
-        : Promise<Event[]> {
+    public static getEvents(eventLog: string,after: string) : Promise<Event[]> {
         let command = `Get-EventLog -LogName "${eventLog}"`;
         if (after) command += ` -After "${after}"`;
         
         command += ' ' + PowershellCommands.selectEvent;
-        return commandExecutor(command)
+        return PsCommandExecutor.executeCommand(command)
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
