@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { GlobalUtils } from '../../../services/global-utils';
 import { EventEntryTypes } from '../../../types/Constants';
-import { EventFilters } from '../../../types/EventFilters';
+import { EventFiltersVm } from '../../../types/viewmodels/EventFiltersVm';
 //#endregion imports
 
 @Component({
@@ -13,7 +13,7 @@ export class EventViewerFiltersComponent {
     //#region Constructor & Properties
     constructor() { }
     public eventLevels: string[] = GlobalUtils.enumValuesToArray(EventEntryTypes);
-    public filters: EventFilters = new EventFilters();
+    public filters: EventFiltersVm = new EventFiltersVm();
     //#endregion Constructor & Properties
 
 

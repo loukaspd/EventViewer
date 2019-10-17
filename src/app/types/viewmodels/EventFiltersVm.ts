@@ -1,6 +1,6 @@
-import { EventEntryTypes } from "./Constants";
+import { EventEntryTypes } from "../Constants";
 
-export class EventFilters {
+export class EventFiltersVm {
     public eventEntryTypes: EventEntryTypes[] = [];
     public dateFrom: Date;
     public dateTo: Date;

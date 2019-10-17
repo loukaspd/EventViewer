@@ -35,7 +35,7 @@ export class PowershellService {
         .catch(e => {
             console.log(e);
             this._initShell();
-            return [];
+            return '';
         });
     }
 

@@ -31,10 +31,23 @@ export class PowershellCommands {
     //#endregion
 
     //#region Events
-    public static selectEvent: string = ` | select-object Index,EntryType,Source,@{n='TimeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},@{n='originalTimeString';e={($_.timegenerated)}},Message`;
+    public static getEvents(
+        commandExecutor: (command:string) => Promise<string>
+        ,eventLog: string
+        ,after: string) 
+        : Promise<Event[]> {
+        let command = `Get-EventLog -LogName "${eventLog}"`;
+        if (after) command += ` -After "${after}"`;
+        
+        command += ' ' + PowershellCommands.selectEvent;
+        return commandExecutor(command)
+        .then(output => PowershellCommands._parseEventsCommandOutput(output));
+    }
+
+    private static selectEvent: string = ` | select-object Index,EntryType,Source,@{n='TimeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},@{n='originalTimeString';e={($_.timegenerated)}},Message`;
 
 
-    public static parseEventsCommandOutput(output: string): Event[] {
+    private static _parseEventsCommandOutput(output: string): Event[] {
         const lines = GlobalUtils.splitLines(output).filter(s => !!s.length);
         return lines
         .map((e,index) => /^Index\s+:\s(\d+)/s.test(e) ? index : undefined)
