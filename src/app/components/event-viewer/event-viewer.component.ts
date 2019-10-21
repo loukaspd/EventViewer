@@ -4,7 +4,9 @@ import { Subscription } from 'rxjs';
 
 import { PowershellService } from '../../services/powershell/powershell.service';
 import { Event } from '../../types/Event';
-import { EventEntryTypes } from '../../types/Constants';
+import { Constants } from '../../types/Constants';
+import { filter } from 'rxjs/operators';
+import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 //#endregion imports
 
 @Component({
@@ -20,61 +22,81 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     @Output()
     public unreadEventsUpdated = new EventEmitter<boolean>();
 
-    public loading: boolean = true;
-    public events: Event[] =[];
-    public newEvents: Event[] = [];
-    public eventEntryTypes = EventEntryTypes;
-    private _subscriptions: Subscription[] = [];
+    public viewModel= new ViewModel();
+    public filters= new EventFiltersVm();
+
+    private _events: Event[] =[];
+    private _onNewSubscription: Subscription;
     //#endregion Constructor & Properties
 
 
     //#region Angular Methods
     ngOnInit(): void {
-        this.setupSubscriptions();
+        this._refreshList();
     }
 
     ngOnDestroy(): void {
-        this.events = this.psService.getExistingLogs(this.eventViewerName);
-        this._subscriptions.forEach(s => s.unsubscribe());
+        if (this._onNewSubscription) this._onNewSubscription.unsubscribe();
     }
     //#endregion Angular Methods
 
 
     //#region Implementation
-    private setupSubscriptions(): void {
-        const subscription = this.psService
-        .getEvents$(this.eventViewerName)
-        .subscribe((newLogs) => this._handleNew(newLogs));
-        
-        
-        this._subscriptions.push(subscription);
+
+    private _showNextItems(): void {
+        const elements2show = Math.min(this.viewModel.events.length + Constants.PageNumber, this._events.length);
+        this.viewModel.events = this._events.slice(0,elements2show);
+
+        this.viewModel.hasMore = this.viewModel.events.length < this._events.length;
     }
 
-    private _handleNew(events: Event[]) {
-        this.loading = false;
-        if (!this.events.length) {
-            this.events = [...events];
-            return;
-        }
-        if (!events.length) return;
-        
-        this.newEvents = events.slice();
-        this.unreadEventsUpdated.emit(true);
-    }
-
-    private _updateList():void {
-        this.events = this.newEvents.concat(this.events);
-        this.newEvents = [];
-
-        //ui
+    private _refreshList(): void {
+        // initialize ui variables
+        this.viewModel = new ViewModel();
         this.unreadEventsUpdated.emit(false);
+        this.viewModel.loading = true;
+        // get data
+        this.psService.getEvents(this.eventViewerName, this.filters)
+        .then((events: Event[]) => {
+            this._events = events;
+            this.viewModel.loading = false;
+            this._showNextItems();
+        });
+        
+
+        // subscription
+        if (this._onNewSubscription) this._onNewSubscription.unsubscribe();
+        this._onNewSubscription = this.psService.onNewEvents$(this.eventViewerName,null)
+        .pipe(filter(p => p.length > 0))
+        .subscribe((newEvents: Event[]) => this._onNewEvents(newEvents));
+    }
+
+    private _onNewEvents(newEvents: Event[]): void {
+        //ui
+        this.viewModel.hasNew = true;
+        this.unreadEventsUpdated.emit(true);
     }
     //#endregion Implementation
 
 
     //#region UiCallbacks
-    public onRefreshClicked(): void {
-        this._updateList();
+    public uiOnRefreshClicked(): void {
+        this._refreshList();
+    }
+
+    public uiOnMoreClicked(): void {
+        this._showNextItems();
     }
     //#endregion UiCallbacks
+}
+
+class ViewModel {
+    public loading: boolean = false;
+    public events: Event[] = [];
+    public hasMore: boolean = false;
+    public hasNew: boolean = false;
+
+    constructor(events?: Event[]) {
+        this.events = events || [];
+    }
 }

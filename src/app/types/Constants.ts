@@ -3,3 +3,7 @@ export enum EventEntryTypes {
     Warning= 'Warning',
     Error='Error'
 };
+
+export class Constants {
+    public static PageNumber= 5;
+}

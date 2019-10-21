@@ -4,6 +4,7 @@ import { Event } from '../../types/Event';
 import { Observable } from 'rxjs';
 import { PowershellMonitor } from './powershell-monitor';
 import { PowershellCommands } from './powershell-commands';
+import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 
 @Injectable({
     providedIn: 'root'
@@ -15,21 +16,15 @@ export class PowershellService {
         return PowershellCommands.getEventLogs();
     }
 
-    private _monitors: Map<string,PowershellMonitor> = new Map();
-    public getEvents$(eventViewerName: string): Observable<Event[]> {
-        if (!this._monitors.has(eventViewerName)) {
-            this._monitors.set(eventViewerName, new PowershellMonitor(eventViewerName));
-        }
+    public getEvents(
+        eventLogName: string
+        , filters:EventFiltersVm): Promise<Event[]> {
         
-        return this._monitors.get(eventViewerName).observable$;
+        return PowershellCommands.getEvents(eventLogName,null);
     }
 
-    public getExistingLogs(eventViewerName: string): Event[] {
-        if (!this._monitors.has(eventViewerName)) {
-            this._monitors.set(eventViewerName, new PowershellMonitor(eventViewerName));
-        }
-
-        return this._monitors.get(eventViewerName).allLogs.slice();
+    public onNewEvents$(eventLogName: string, filters:EventFiltersVm): Observable<Event[]> {
+        return new PowershellMonitor(eventLogName, filters).observable$;
     }
     //#endregion Public Api
 }

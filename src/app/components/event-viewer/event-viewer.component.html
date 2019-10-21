@@ -6,8 +6,8 @@
     
     <nz-content>
     <!-- Refersh Button -->
-    <div *ngIf="!!newEvents.length" style="margin-left:5px; margin-bottom: 10px;">
-        <button (click)="onRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+    <div *ngIf="viewModel.hasNew" style="margin-left:5px; margin-bottom: 10px;">
+        <button (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
             <i nz-icon nzType="issues-close"></i>
         </button>
     </div>
@@ -16,7 +16,7 @@
     
     <!-- Main List-->
     <nz-collapse>
-        <nz-collapse-panel *ngFor="let event of events"
+        <nz-collapse-panel *ngFor="let event of viewModel.events"
             [nzHeader]="collapseHeader"
         >
     
@@ -32,11 +32,16 @@
             <p style="white-space: pre-wrap;">{{event.Message}}</p>
         </nz-collapse-panel>
     </nz-collapse>
+
+    <!-- Load More -->
+    <div class="loadmore">
+        <button nz-button *ngIf="!uiLoading && viewModel.hasMore" (click)="uiOnMoreClicked()">load more</button>
+    </div>
     
     <!-- Loaders & NoResults -->
-    <nz-spin class="loader" *ngIf="loading" nzTip="Loading..." nzSimple [nzSize]="'large'"></nz-spin>
+    <nz-spin class="loader" *ngIf="viewModel.loading" nzTip="Loading..." nzSimple [nzSize]="'large'"></nz-spin>
     
-    <nz-empty *ngIf="!loading && events.length == 0"
+    <nz-empty *ngIf="!viewModel.loading && viewModel.events.length == 0"
         [nzNotFoundContent]="emptyContent">
         <ng-template #emptyContent>
             <span>No Events</span>
@@ -44,4 +49,3 @@
     </nz-empty>
     </nz-content>
 </nz-layout>
-

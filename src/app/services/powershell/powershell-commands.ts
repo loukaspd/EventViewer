@@ -32,9 +32,10 @@ export class PowershellCommands {
     //#endregion
 
     //#region Events
-    public static getEvents(eventLog: string,after: string) : Promise<Event[]> {
+    public static getEvents(eventLog: string,after: string, newest?: number) : Promise<Event[]> {
         let command = `Get-EventLog -LogName "${eventLog}"`;
         if (after) command += ` -After "${after}"`;
+        if (newest) command += ` -Newest "${newest}"`;
         
         command += ' ' + PowershellCommands.selectEvent;
         return PsCommandExecutor.executeCommand(command)
