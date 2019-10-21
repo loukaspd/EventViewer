@@ -1,5 +1,5 @@
 //#region imports
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { EventLog } from '../../types/EventLog';
 import { PowershellService } from '../../services/powershell/powershell.service';
 import { NzModalRef } from 'ng-zorro-antd';
@@ -11,7 +11,8 @@ import { map, debounceTime } from 'rxjs/operators';
     selector: 'log-selection',
     templateUrl: 'log-selection.component.html'
 })
-export class LogSelectionComponent implements OnInit {
+export class LogSelectionComponent implements OnInit, OnDestroy {
+    
     //#region Constructor & Properties
     constructor(private psService: PowershellService
         , private modal: NzModalRef
@@ -22,13 +23,18 @@ export class LogSelectionComponent implements OnInit {
     private _logers: EventLog[] = [];
     public logers: EventLog[] = [];
     private _searchValue: string = '';
+    public remoteComputer: string = '';
     //#endregion Constructor & Properties
 
 
     //#region Component Methods
     ngOnInit(): void {
-        this._refreshList();
+        this.search();
         this._setupSearch();
+    }
+
+    ngOnDestroy(): void {
+        if (!!this._searchSubscription) this._searchSubscription.unsubscribe();
     }
     //#endregion Component Methods
 
@@ -54,9 +60,9 @@ export class LogSelectionComponent implements OnInit {
         });
     }
 
-    private _refreshList(): void {
+    private search(): void {
         this.loading = true;
-        this.psService.getEventLogs()
+        this.psService.getEventLogs(this.remoteComputer)
         .then((evs: EventLog[]) => {
             this._logers = evs;
             this.loading = false;

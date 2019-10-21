@@ -1,9 +1,17 @@
+<nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+    <input type="text" nz-input placeholder="connect to remote computer" [(ngModel)]="remoteComputer" />
+  </nz-input-group>
+  <ng-template #suffixButton>
+    <button (click)="search()" nz-button nzType="primary" nzSize="large" nzSearch>Apply</button>
+  </ng-template>
+
 <nz-input-group [nzSuffix]="suffixIconSearch">
     <input type="text" nz-input placeholder="search" id="searchInput"/>
 </nz-input-group>
-    <ng-template #suffixIconSearch>
+<ng-template #suffixIconSearch>
     <i nz-icon nzType="search"></i>
 </ng-template>
+
 
 <nz-list
     [nzDataSource]="logers"

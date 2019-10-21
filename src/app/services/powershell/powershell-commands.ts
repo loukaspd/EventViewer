@@ -6,8 +6,13 @@ import { PsCommandExecutor } from "./powershell-command-executor";
 export class PowershellCommands {
 
     //#region Event Log
-    public static getEventLogs(): Promise<EventLog[]> {
-        return PsCommandExecutor.executeCommand('Get-EventLog -List')
+    public static getEventLogs(computerName: string): Promise<EventLog[]> {
+        let command = 'Get-EventLog';
+        if (computerName) command += ` -ComputerName ${computerName}`;
+        command += ' -List';
+
+        console.log(command);
+        return PsCommandExecutor.executeCommand(command)
         .then(output => PowershellCommands._parseEventViewersList(output));
     }
     
