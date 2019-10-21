@@ -5,5 +5,5 @@ export enum EventEntryTypes {
 };
 
 export class Constants {
-    public static PageNumber= 5;
+    public static PageNumber= 50;
 }
