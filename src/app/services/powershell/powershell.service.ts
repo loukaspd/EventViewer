@@ -17,14 +17,14 @@ export class PowershellService {
     }
 
     public getEvents(
-        eventLogName: string
+        eventLog: EventLog
         , filters:EventFiltersVm): Promise<Event[]> {
         
-        return PowershellCommands.getEvents(eventLogName,null);
+        return PowershellCommands.getEvents(eventLog,null);
     }
 
-    public onNewEvents$(eventLogName: string, filters:EventFiltersVm): Observable<Event[]> {
-        return new PowershellMonitor(eventLogName, filters).observable$;
+    public onNewEvents$(eventLog: EventLog, filters:EventFiltersVm): Observable<Event[]> {
+        return new PowershellMonitor(eventLog, filters).observable$;
     }
     //#endregion Public Api
 }

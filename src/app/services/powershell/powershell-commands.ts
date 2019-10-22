@@ -11,9 +11,12 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName ${computerName}`;
         command += ' -List';
 
-        console.log(command);
         return PsCommandExecutor.executeCommand(command)
-        .then(output => PowershellCommands._parseEventViewersList(output));
+        .then(output => PowershellCommands._parseEventViewersList(output))
+        .then(events => {
+            events.forEach(e => e.computerName = computerName);
+            return events;
+        });
     }
     
     private static _parseEventViewersList(output: string): EventLog[] {
@@ -37,8 +40,9 @@ export class PowershellCommands {
     //#endregion
 
     //#region Events
-    public static getEvents(eventLog: string,after: string, newest?: number) : Promise<Event[]> {
-        let command = `Get-EventLog -LogName "${eventLog}"`;
+    public static getEvents(eventLog: EventLog,after: string, newest?: number) : Promise<Event[]> {
+        let command = `Get-EventLog -LogName "${eventLog.log}"`;
+        if (eventLog.computerName) command += ` -ComputerName ${eventLog.computerName}"`;
         if (after) command += ` -After "${after}"`;
         if (newest) command += ` -Newest "${newest}"`;
         

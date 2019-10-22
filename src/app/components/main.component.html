@@ -12,7 +12,7 @@
       </div>
     </ng-template>
     <event-viewer
-    [eventViewerName]="tab.log"
+    [eventLog]="tab"
     (unreadEventsUpdated)="tabsWithNewContent[i]=$event"
     ></event-viewer>
   </nz-tab>

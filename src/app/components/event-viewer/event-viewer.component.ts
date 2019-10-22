@@ -7,6 +7,7 @@ import { Event } from '../../types/Event';
 import { Constants } from '../../types/Constants';
 import { filter } from 'rxjs/operators';
 import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
+import { EventLog } from '../../types/EventLog';
 //#endregion imports
 
 @Component({
@@ -18,7 +19,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     constructor(private psService: PowershellService) { }
 
     @Input()
-    public eventViewerName: string;
+    public eventLog: EventLog;
     @Output()
     public unreadEventsUpdated = new EventEmitter<boolean>();
 
@@ -56,7 +57,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         this.unreadEventsUpdated.emit(false);
         this.viewModel.loading = true;
         // get data
-        this.psService.getEvents(this.eventViewerName, this.filters)
+        this.psService.getEvents(this.eventLog, this.filters)
         .then((events: Event[]) => {
             this._events = events;
             this.viewModel.loading = false;
@@ -66,7 +67,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
         // subscription
         if (this._onNewSubscription) this._onNewSubscription.unsubscribe();
-        this._onNewSubscription = this.psService.onNewEvents$(this.eventViewerName,null)
+        this._onNewSubscription = this.psService.onNewEvents$(this.eventLog,null)
         .pipe(filter(p => p.length > 0))
         .subscribe((newEvents: Event[]) => this._onNewEvents(newEvents));
     }
