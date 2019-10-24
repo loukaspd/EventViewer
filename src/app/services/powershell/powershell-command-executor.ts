@@ -1,4 +1,18 @@
 import Shell from 'node-powershell';
+import { GlobalUtils } from '../global-utils';
+
+
+
+
+export class CommandTimeoutError extends Error {
+    constructor(message?: string) {
+        super(message);
+        // see: typescriptlang.org/docs/handbook/release-notes/typescript-2-2.html
+        Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
+        this.name = 'CommandTimeoutError'; // stack traces display correctly now 
+    }
+}
+
 
 export class PsCommandExecutor {    
     private static _ps: Shell;
@@ -9,19 +23,35 @@ export class PsCommandExecutor {
         });
     }
 
-    public static executeCommand(command: string): Promise<string> {
+    /**
+     * executes a powershell command and returns the output.
+     * @param command the command to execute
+     * @param timeout (optional) specify the max time in seconds that this command should run
+     */
+    public static executeCommand(command: string, timeout?:number): Promise<string> {
         //#region Mock Result
         if (this.MOCK) return Promise.resolve(this.MOCK_RESULT(command));
         //#endregion Mock Result
         if (!this._ps) this._initShell();
 
-        return this._ps.addCommand(command)
+        const commandPromise: Promise<string> = this._ps.addCommand(command)
         .then(() => this._ps.invoke())
         .catch(e => {
             console.error(e);
             this._initShell();
             return '';
         });
+
+        if (!timeout) return commandPromise;
+        else {
+            const timeoutPromise: Promise<string> = GlobalUtils.timeoutPromise((timeout*1000))
+            .then(() => {
+                this._initShell();
+                throw new CommandTimeoutError();
+            });
+
+            return Promise.race([commandPromise, timeoutPromise]);
+        }
     }
 
     //#region MOCK
