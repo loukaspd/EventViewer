@@ -6,13 +6,15 @@
     
     <nz-content>
     <!-- Refersh Button -->
-    <div *ngIf="viewModel.hasNew" style="margin-left:5px; margin-bottom: 10px;">
-        <button (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+    <div style="margin-left:5px; margin-bottom: 10px;">
+        <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+            <i nz-icon nzType="delete"></i>
+        </button>
+
+        <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
             <i nz-icon nzType="issues-close"></i>
         </button>
     </div>
-    
-    
     
     <!-- Main List-->
     <nz-collapse>

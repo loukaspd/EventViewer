@@ -5,10 +5,17 @@ import { PsCommandExecutor } from "./powershell-command-executor";
 
 export class PowershellCommands {
 
+    static clearEventLog(eventLog: EventLog): Promise<string> {
+        let command = `Clear-EventLog -LogName "${eventLog.log}"`;
+        if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
+        
+        return PsCommandExecutor.executeCommand(command);
+    }
+
     //#region Event Log
     public static getEventLogs(computerName: string): Promise<EventLog[]> {
         let command = 'Get-EventLog';
-        if (computerName) command += ` -ComputerName ${computerName}`;
+        if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
         return PsCommandExecutor.executeCommand(command)
@@ -44,7 +51,7 @@ export class PowershellCommands {
         let command = `Get-EventLog -LogName "${eventLog.log}"`;
         if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         if (after) command += ` -After "${after}"`;
-        if (newest) command += ` -Newest "${newest}"`;
+        if (newest) command += ` -Newest ${newest}`;
         
         command += ' ' + PowershellCommands.selectEvent;
         return PsCommandExecutor.executeCommand(command)

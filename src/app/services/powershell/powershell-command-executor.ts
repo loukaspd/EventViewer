@@ -1,5 +1,4 @@
 import Shell from 'node-powershell';
-import { GlobalUtils } from '../global-utils';
 
 export class PsCommandExecutor {    
     private static _ps: Shell;
@@ -19,7 +18,7 @@ export class PsCommandExecutor {
         return this._ps.addCommand(command)
         .then(() => this._ps.invoke())
         .catch(e => {
-            console.log(e);
+            console.error(e);
             this._initShell();
             return '';
         });

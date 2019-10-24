@@ -26,5 +26,9 @@ export class PowershellService {
     public onNewEvents$(eventLog: EventLog, filters:EventFiltersVm): Observable<Event[]> {
         return new PowershellMonitor(eventLog, filters).observable$;
     }
+
+    public clearEventLog(eventLog: EventLog): Promise<string> {
+        return PowershellCommands.clearEventLog(eventLog);
+    }
     //#endregion Public Api
 }

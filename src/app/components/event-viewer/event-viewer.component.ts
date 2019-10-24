@@ -8,6 +8,7 @@ import { Constants } from '../../types/Constants';
 import { filter } from 'rxjs/operators';
 import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 import { EventLog } from '../../types/EventLog';
+import { NzModalService } from 'ng-zorro-antd';
 //#endregion imports
 
 @Component({
@@ -16,7 +17,7 @@ import { EventLog } from '../../types/EventLog';
 })
 export class EventViewerComponent implements OnInit, OnDestroy {
     //#region Constructor & Properties
-    constructor(private psService: PowershellService) { }
+    constructor(private psService: PowershellService, private modalService: NzModalService) { }
 
     @Input()
     public eventLog: EventLog;
@@ -77,6 +78,11 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         this.viewModel.hasNew = true;
         this.unreadEventsUpdated.emit(true);
     }
+
+    private _clearEvents(): void {
+        this.psService.clearEventLog(this.eventLog)
+        .then(() => this._refreshList());
+    }
     //#endregion Implementation
 
 
@@ -87,6 +93,16 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
     public uiOnMoreClicked(): void {
         this._showNextItems();
+    }
+
+    public uiOnClearClicked(): void {
+        this.modalService.confirm({
+            nzTitle: `Clear all events from ${this.eventLog.log}?`
+            ,nzCancelText: 'Cancel'
+            ,nzOkText: 'Yes'
+            ,nzOkType: 'danger'
+            ,nzOnOk: () => this._clearEvents()
+        });
     }
     //#endregion UiCallbacks
 }
