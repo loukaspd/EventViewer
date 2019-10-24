@@ -42,7 +42,7 @@ export class PowershellCommands {
     //#region Events
     public static getEvents(eventLog: EventLog,after: string, newest?: number) : Promise<Event[]> {
         let command = `Get-EventLog -LogName "${eventLog.log}"`;
-        if (eventLog.computerName) command += ` -ComputerName ${eventLog.computerName}"`;
+        if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         if (after) command += ` -After "${after}"`;
         if (newest) command += ` -Newest "${newest}"`;
         
