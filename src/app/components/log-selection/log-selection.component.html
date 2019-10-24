@@ -11,7 +11,7 @@
     <input type="text" nz-input placeholder="connect to remote computer" [(ngModel)]="remoteComputer" />
 </nz-input-group>
 <ng-template #suffixButton>
-<button (click)="search()" nz-button nzType="primary" nzSearch>Apply</button>
+<button (click)="UiOnSearchClicked()" nz-button nzType="primary" nzSearch>Apply</button>
 </ng-template>
 
 
@@ -24,6 +24,6 @@
 >
     <ng-template #itemRef let-item>
         <li nz-list-item [nzActions]="[opAction]" [nzContent]="item.log + ' ('+ item.entries +')'" nzNoFlex></li>
-        <ng-template #opAction><a (click)="onItemSelected(item)">select</a></ng-template>
+        <ng-template #opAction><a (click)="UiOnItemSelected(item)">select</a></ng-template>
     </ng-template>
 </nz-list>

@@ -18,7 +18,7 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
-        return PsCommandExecutor.executeCommand(command)
+        return PsCommandExecutor.executeCommand(command, 5)
         .then(output => PowershellCommands._parseEventViewersList(output))
         .then(events => {
             events.forEach(e => e.computerName = computerName);

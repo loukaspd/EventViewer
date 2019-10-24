@@ -12,10 +12,6 @@ import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 export class PowershellService {
     //#region Public Api
 
-    public getEventLogs(computerName: string): Promise<EventLog[]> {
-        return PowershellCommands.getEventLogs(computerName);
-    }
-
     public getEvents(
         eventLog: EventLog
         , filters:EventFiltersVm): Promise<Event[]> {
