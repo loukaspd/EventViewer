@@ -48,7 +48,7 @@ export class MainComponent implements OnInit{
 
   public onEventLogSelected(eventLog: EventLog) {
     if (!eventLog) return;
-    const index =this.tabs.findIndex(t => t.log == eventLog.log);
+    const index = this.tabs.findIndex(t => t.IsSame(eventLog));
     if (index >=0) {
       this.activeIndex = index;
       return;
