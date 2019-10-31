@@ -60,7 +60,8 @@ export class PsCommandExecutor {
     private static MOCK_EVENTS_RETURNED = false;
     private static MOCK_RESULT(command:string): string {
         if (!this.MOCK)return undefined;
-        if (command == 'Get-EventLog -List') {
+        
+        if ((/Get-EventLog (?:-ComputerName .*)?-List/).test(command)) {
             //#region MOCK_ENENTLOGS
             return `
 Max(K) Retain OverflowAction        Entries Log                                                                      
