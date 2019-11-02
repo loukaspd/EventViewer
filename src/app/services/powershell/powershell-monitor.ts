@@ -1,16 +1,17 @@
 import { Observable, defer, interval } from "rxjs";
 import {concatMap} from 'rxjs/operators'
 import { Event } from "../../types/Event";
-import { PowershellCommands } from "./powershell-commands";
+import { PowershellCommands, GetEventsParams } from "./powershell-commands";
 import { EventFiltersVm } from "../../types/viewmodels/EventFiltersVm";
 import { EventLog } from "../../types/EventLog";
 
 export class PowershellMonitor {
     private _eventLog: EventLog;
-
+    private _filters: EventFiltersVm;
 
     constructor(eventLog: EventLog, filters:EventFiltersVm) {
         this._eventLog = eventLog;
+        this._filters = filters;
         this.observable$ = interval(1000).pipe(   //every one second
             concatMap(() => this._getLogs())
         );
@@ -23,7 +24,7 @@ export class PowershellMonitor {
 
     private _getLogs(): Observable<Event[]> {
         const logsPromise: Promise<Event[]> = 
-        PowershellCommands.getEvents(this._eventLog
+        PowershellCommands.getEvents(new GetEventsParams(this._eventLog, this._filters)
         ,this._lastEvent ? this._lastEvent.originalTimeString : undefined
         , this._lastEvent ? undefined : 1)
         .then((newLogs:Event[]) => {

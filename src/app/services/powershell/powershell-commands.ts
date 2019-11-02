@@ -2,6 +2,7 @@ import { Event } from "../../types/Event";
 import { EventLog } from "../../types/EventLog";
 import { GlobalUtils } from "../global-utils";
 import { PsCommandExecutor } from "./powershell-command-executor";
+import { EventFiltersVm } from "../../types/viewmodels/EventFiltersVm";
 
 export class PowershellCommands {
 
@@ -47,18 +48,16 @@ export class PowershellCommands {
     //#endregion
 
     //#region Events
-    public static getEvents(eventLog: EventLog,after: string, newest?: number) : Promise<Event[]> {
-        let command = `Get-EventLog -LogName "${eventLog.log}"`;
-        if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
-        if (after) command += ` -After "${after}"`;
+    public static getEvents(params:GetEventsParams, after: string, newest?: number) : Promise<Event[]> {
+        let command = params.buildCommand(after);
         if (newest) command += ` -Newest ${newest}`;
         
-        command += ' ' + PowershellCommands.selectEvent;
+        command += ' ' + PowershellCommands._selectEventCommand;
         return PsCommandExecutor.executeCommand(command)
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
-    private static selectEvent: string = ` | select-object Index,EntryType,Source,@{n='TimeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},@{n='originalTimeString';e={($_.timegenerated)}},Message`;
+    private static _selectEventCommand: string = ` | select-object Index,EntryType,Source,@{n='TimeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},@{n='originalTimeString';e={($_.timegenerated)}},Message`;
 
 
     private static _parseEventsCommandOutput(output: string): Event[] {
@@ -100,4 +99,60 @@ export class PowershellCommands {
     // private regex: RegExp = /^Index\s+:\s(\d+)\n^EntryType\s+:\s(\D+)\n^InstanceId\s+:\s(\d+)\n^Message\s+:\s((.|\n)+?(?=^Category))^Category\s+:\s(.+)\n^CategoryNumber\s+:\s(\d+)\n^ReplacementStrings\s+:\s((.|\n)+?(?=^Source))^Source\s+:\s(.*)\n^TimeGenerated\s+:\s(.*)\n^TimeWritten\s+:\s(.*)\n^UserName\s+:\s(.*)/mg;
 
     //#endregion Events
+}
+
+
+export class GetEventsParams {
+    public computerName: string;
+    public log: string;
+
+    public eventEntryTypes: string[] = [];
+    public dateFrom: Date;
+    public dateTo: Date;
+    public searchTerm: string = '';
+
+    constructor(eventLog: EventLog, filters?: EventFiltersVm) {
+        this.copyFromEventLog(eventLog);
+        if (!!filters) this.copyFromFilters(filters);
+    }
+
+    public copyFromEventLog(eventLog: EventLog):void {
+        this.computerName = eventLog.computerName;
+        this.log = eventLog.log;
+    }
+
+    public copyFromFilters(filters: EventFiltersVm):void {
+        this.eventEntryTypes = [...filters.eventEntryTypes];
+        this.dateFrom = filters.dateFrom;
+        this.dateTo = filters.dateTo;
+        this.searchTerm = filters.searchTerm;
+    }
+
+
+    public buildCommand(after: string): string {
+        let command = `Get-EventLog -LogName "${this.log}"`;
+        if (this.computerName) command += ` -ComputerName "${this.computerName}"`;
+
+        if (this.dateTo) command += ` -Before "${this._toPsDate(this.dateTo)}"`;
+
+        if (this.eventEntryTypes.length > 0) {
+            command += ` -EntryType ${this.eventEntryTypes.join(',')}`;
+        }
+
+        if (!!this.searchTerm) {
+            command += ` -Message "*${this.searchTerm}*"`;
+        }
+        
+        //after
+        if (after) command += ` -After "${after}"`;
+        else if (!!this.dateFrom) command += ` -After "${this._toPsDate(this.dateFrom)}"`;
+
+        console.log(command);   //REMOVE
+        return command;
+    }
+
+
+    private _toPsDate(date: Date): string {
+        return '';  //TODO
+    }
 }

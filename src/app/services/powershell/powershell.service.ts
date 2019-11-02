@@ -3,7 +3,7 @@ import { EventLog } from '../../types/EventLog';
 import { Event } from '../../types/Event';
 import { Observable } from 'rxjs';
 import { PowershellMonitor } from './powershell-monitor';
-import { PowershellCommands } from './powershell-commands';
+import { PowershellCommands, GetEventsParams } from './powershell-commands';
 import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class PowershellService {
         eventLog: EventLog
         , filters:EventFiltersVm): Promise<Event[]> {
         
-        return PowershellCommands.getEvents(eventLog,null);
+        return PowershellCommands.getEvents(new GetEventsParams(eventLog, filters), null, null);
     }
 
     public onNewEvents$(eventLog: EventLog, filters:EventFiltersVm): Observable<Event[]> {
