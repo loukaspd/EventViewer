@@ -9,6 +9,7 @@ import { filter } from 'rxjs/operators';
 import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 import { EventLog } from '../../types/EventLog';
 import { NzModalService } from 'ng-zorro-antd';
+import { GlobalUtils } from '../../services/global-utils';
 //#endregion imports
 
 @Component({
@@ -96,12 +97,23 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     }
 
     public uiOnClearClicked(): void {
-        this.modalService.confirm({
-            nzTitle: `Clear all events from ${this.eventLog.log}?`
-            ,nzCancelText: 'Cancel'
-            ,nzOkText: 'Yes'
-            ,nzOkType: 'danger'
-            ,nzOnOk: () => this._clearEvents()
+        GlobalUtils.runningAsAdmin()
+        .then((res:boolean) => {
+            if (!res) {
+                this.modalService.error({
+                    nzTitle: 'Error'
+                    ,nzContent: 'Run the app as admin to execute this action'
+                  });
+                return;
+            }
+
+            this.modalService.confirm({
+                nzTitle: `Clear all events from ${this.eventLog.log}?`
+                ,nzCancelText: 'Cancel'
+                ,nzOkText: 'Yes'
+                ,nzOkType: 'danger'
+                ,nzOnOk: () => this._clearEvents()
+            });
         });
     }
     //#endregion UiCallbacks
