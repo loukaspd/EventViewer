@@ -34,7 +34,8 @@ export class PsCommandExecutor {
         //#endregion Mock Result
         if (!this._ps) this._initShell();
 
-        const commandPromise: Promise<string> = this._ps.addCommand(command)
+        const commandPromise: Promise<string> = this._ps.addCommand('[Console]::OutputEncoding = [System.Text.Encoding]::UTF8')
+        .then(() => this._ps.addCommand(command))
         .then(() => this._ps.invoke())
         .catch(e => {
             console.error(e);
