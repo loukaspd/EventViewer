@@ -1,6 +1,8 @@
 <nz-layout>
     <nz-sider>
-        <event-viewer-filters></event-viewer-filters>
+        <event-viewer-filters
+        (onFiltersChanged)="uiOnFiltersChanged($event)"
+        ></event-viewer-filters>
     </nz-sider>
     
     

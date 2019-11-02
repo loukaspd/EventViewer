@@ -29,3 +29,7 @@
       [(ngModel)]="filters.dateTo"
       nzPlaceHolder="Date To"
 ></nz-date-picker>
+
+<!-- Buttons -->
+<button nz-button [nzType]="'primary'" (click)="UiOnApplyClicked()">Apply</button>
+<button nz-button (click)="UiOnClearClicked()">Clear</button>

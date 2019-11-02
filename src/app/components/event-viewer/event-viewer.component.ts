@@ -116,6 +116,11 @@ export class EventViewerComponent implements OnInit, OnDestroy {
             });
         });
     }
+
+    public uiOnFiltersChanged(filters: EventFiltersVm): void {
+        this.filters = filters;
+        this._refreshList();
+    }
     //#endregion UiCallbacks
 }
 
