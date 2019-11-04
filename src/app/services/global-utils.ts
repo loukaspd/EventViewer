@@ -22,3 +22,15 @@ export class GlobalUtils {
         })
     }
 }
+
+//#region Array Extensions
+declare global {
+    interface Array<T> {
+        last(): T;
+    }
+}
+
+Array.prototype.last = function() {
+    return this.length == 0 ? undefined : this[this.length-1];
+}
+//#endregion Array Extensions

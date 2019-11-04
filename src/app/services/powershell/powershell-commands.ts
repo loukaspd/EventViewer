@@ -10,7 +10,7 @@ export class PowershellCommands {
         let command = `Clear-EventLog -LogName "${eventLog.log}"`;
         if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         
-        return PsCommandExecutor.executeCommand(command);
+        return PsCommandExecutor.executeCommand([command]);
     }
 
     //#region Event Log
@@ -19,7 +19,7 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
-        return PsCommandExecutor.executeCommand(command)
+        return PsCommandExecutor.executeCommand([command])
         .then(output => PowershellCommands._parseEventViewersList(output))
         .then(events => {
             events.forEach(e => e.computerName = computerName);
@@ -49,11 +49,11 @@ export class PowershellCommands {
 
     //#region Events
     public static getEvents(params:GetEventsParams, after: string, newest?: number) : Promise<Event[]> {
-        let command = params.buildCommand(after);
-        if (newest) command += ` -Newest ${newest}`;
+        let commands = params.buildCommand(after);
+        if (newest) commands[commands.length-1] += ` -Newest ${newest}`;
         
-        command += ' ' + PowershellCommands._selectEventCommand;
-        return PsCommandExecutor.executeCommand(command)
+        commands[commands.length-1] += ' ' + PowershellCommands._selectEventCommand;
+        return PsCommandExecutor.executeCommand(commands)
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
@@ -129,11 +129,21 @@ export class GetEventsParams {
     }
 
 
-    public buildCommand(after: string): string {
+    /**
+     * returns array of commands that sould be executed.
+     * The last array element is the main command. 
+     * Elements that are before it declare variables that are used in the main command.
+     * @param after specify the after param that should be used, that has higher hierarchy than the filters.
+     */
+    public buildCommand(after: string): string[] {
+        let result = [];
         let command = `Get-EventLog -LogName "${this.log}"`;
         if (this.computerName) command += ` -ComputerName "${this.computerName}"`;
 
-        if (this.dateTo) command += ` -Before "${this._toPsDate(this.dateTo)}"`;
+        if (this.dateTo) {
+            result.push(`$before = ${this._toPsDate(this.dateTo)}`);
+            command += ` -Before $before`;
+        } 
 
         if (this.eventEntryTypes.length > 0) {
             command += ` -EntryType ${this.eventEntryTypes.join(',')}`;
@@ -145,14 +155,17 @@ export class GetEventsParams {
         
         //after
         if (after) command += ` -After "${after}"`;
-        else if (!!this.dateFrom) command += ` -After "${this._toPsDate(this.dateFrom)}"`;
+        else if (!!this.dateFrom) {
+            result.push(`$after = ${this._toPsDate(this.dateFrom)}`);
+            command += ` -After $after`;
+        }
 
-        console.log(command);   //REMOVE
-        return command;
+        return [...result,command];
     }
 
 
     private _toPsDate(date: Date): string {
-        return '';  //TODO
+        const dateAsString = date.toLocaleString('en-GB', { timeZone: 'UTC' });
+        return `[datetime]::parseexact(\'${dateAsString}\', \'dd/MM/yyyy, HH:mm:ss\', $null)`;  //TODO
     }
 }

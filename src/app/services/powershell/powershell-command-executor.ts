@@ -15,9 +15,8 @@ export class CommandTimeoutError extends Error {
 
 
 export class PsCommandExecutor {    
-    private static _ps: Shell;
-    private static _initShell(): void {
-        this._ps = new Shell({
+    private static _initShell(): Shell {
+        return new Shell({
             executionPolicy: 'Bypass',
             noProfile: true
         });
@@ -28,15 +27,16 @@ export class PsCommandExecutor {
      * @param command the command to execute
      * @param timeout (optional) specify the max time in seconds that this command should run
      */
-    public static executeCommand(command: string, timeout?:number): Promise<string> {
+    public static executeCommand(commands: string[], timeout?:number): Promise<string> {
         //#region Mock Result
-        if (this.MOCK) return Promise.resolve(this.MOCK_RESULT(command));
+        if (this.MOCK) return Promise.resolve(this.MOCK_RESULT(commands));
         //#endregion Mock Result
-        if (!this._ps) this._initShell();
-
-        const commandPromise: Promise<string> = this._ps.addCommand('[Console]::OutputEncoding = [System.Text.Encoding]::UTF8')
-        .then(() => this._ps.addCommand(command))
-        .then(() => this._ps.invoke())
+        
+        commands.length > 1 ? console.table(commands) : console.log(commands.last());    //REMOVE
+        const _ps = this._initShell();
+        const commandPromise: Promise<string> = _ps.addCommand('[Console]::OutputEncoding = [System.Text.Encoding]::UTF8')
+        .then(Promise.all(commands.map(c => _ps.addCommand(c))))
+        .then(() => _ps.invoke())
         .catch(e => {
             console.error(e);
             this._initShell();
@@ -59,10 +59,10 @@ export class PsCommandExecutor {
     private static MOCK = false;
     
     private static MOCK_EVENTS_RETURNED = false;
-    private static MOCK_RESULT(command:string): string {
+    private static MOCK_RESULT(commands:string[]): string {
         if (!this.MOCK)return undefined;
         
-        if ((/Get-EventLog (?:-ComputerName .*)?-List/).test(command)) {
+        if ((/Get-EventLog (?:-ComputerName .*)?-List/).test(commands.last())) {
             //#region MOCK_ENENTLOGS
             return `
 Max(K) Retain OverflowAction        Entries Log                                                                      
