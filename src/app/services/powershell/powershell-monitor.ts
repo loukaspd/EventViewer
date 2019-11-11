@@ -36,7 +36,7 @@ export class PowershellMonitor {
             }
 
             newLogs = newLogs.filter(newLog => newLog.Index > this._lastEvent.Index);
-            this._lastEvent = newLogs[0];
+            if (newLogs.length) this._lastEvent = newLogs[0];
             return newLogs;
         });
         
