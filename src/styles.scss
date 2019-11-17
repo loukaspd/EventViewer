@@ -1,8 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'main.scss';
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+.full-height {
+  height: 100% !important;
+}
+
+.white-color {
+  color: #ffffff
+}
+
+.margin-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .fab-button {
@@ -11,7 +26,6 @@ html, body {
   bottom: 10px;
   z-index: 999;
 }
-
 
 .event-icon-warn {
   color:#ffae42;
@@ -22,7 +36,6 @@ html, body {
 .event-icon-info {
   color:#486274;
 }
-
 
 // Event-Viewer
 .loadmore {
