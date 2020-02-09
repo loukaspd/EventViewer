@@ -1,5 +1,4 @@
 import { Observable, defer, interval, Subject } from "rxjs";
-import {concatMap} from 'rxjs/operators'
 import { Event } from "../../types/Event";
 import { PowershellCommands } from "./powershell-commands";
 import { EventLog } from "../../types/EventLog";
@@ -45,9 +44,6 @@ export class PowershellMonitor {
     //#region Implementation
 
     private _getLogs(): void{
-        const now = new Date();
-        console.log('executing query', `${now.getMinutes()}:${now.getSeconds()}`); //TODO remove
-        
         PowershellCommands.getEvents(this._eventLog, this._lastEvent)
         .then((newEvents :Event[]) => {
             newEvents = newEvents.filter(newLog => newLog.Index > this._lastEvent.Index);
