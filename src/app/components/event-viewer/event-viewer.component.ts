@@ -1,5 +1,5 @@
 //#region imports
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Event } from '../../types/Event';
@@ -15,17 +15,18 @@ import { PowershellMonitor } from '../../services/powershell/powershell-monitor'
 @Component({
     selector: 'event-viewer',
     templateUrl: 'event-viewer.component.html'
+    ,changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventViewerComponent implements OnInit, OnDestroy {
     //#region Constructor & Properties
-    constructor(private modalService: NzModalService) { }
+    constructor(private modalService: NzModalService
+        ,private changeDetRef: ChangeDetectorRef) { }
 
     @Input()
     public eventLog: EventLog;
     @Output()
     public unreadEventsUpdated = new EventEmitter<boolean>();
 
-    public loading = true;
     public viewModel= new ViewModel();
     public filters= new EventFiltersVm();
 
@@ -38,10 +39,12 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
     //#region Angular Methods
     ngOnInit(): void {
+        this.viewModel.loading = true;
+        this.changeDetRef.markForCheck();
+        
         this._monitor = new PowershellMonitor(this.eventLog);
         this._monitor.initialize().then((events :Event[]) => {
             this._allEvents = events;
-            this.loading = false;
             this._refreshList();
         });
 
@@ -64,6 +67,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         this.viewModel.events = this._events.slice(0,elements2show);
 
         this.viewModel.hasMore = this.viewModel.events.length < this._events.length;
+        this.changeDetRef.markForCheck();
     }
 
     private _refreshList(): void {
@@ -85,6 +89,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         //notify ui
         this.viewModel.hasNew = true;
         this.unreadEventsUpdated.emit(true);
+        this.changeDetRef.markForCheck();
     }
 
     private _clearEvents(): void {
