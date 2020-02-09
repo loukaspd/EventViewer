@@ -2,14 +2,14 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { PowershellService } from '../../services/powershell/powershell.service';
 import { Event } from '../../types/Event';
 import { Constants } from '../../types/Constants';
-import { filter } from 'rxjs/operators';
 import { EventFiltersVm } from '../../types/viewmodels/EventFiltersVm';
 import { EventLog } from '../../types/EventLog';
 import { NzModalService } from 'ng-zorro-antd';
 import { GlobalUtils } from '../../services/global-utils';
+import { PowershellCommands } from '../../services/powershell/powershell-commands';
+import { PowershellMonitor } from '../../services/powershell/powershell-monitor';
 //#endregion imports
 
 @Component({
@@ -18,28 +18,41 @@ import { GlobalUtils } from '../../services/global-utils';
 })
 export class EventViewerComponent implements OnInit, OnDestroy {
     //#region Constructor & Properties
-    constructor(private psService: PowershellService, private modalService: NzModalService) { }
+    constructor(private modalService: NzModalService) { }
 
     @Input()
     public eventLog: EventLog;
     @Output()
     public unreadEventsUpdated = new EventEmitter<boolean>();
 
+    public loading = true;
     public viewModel= new ViewModel();
     public filters= new EventFiltersVm();
 
-    private _events: Event[] =[];
+    private _monitor: PowershellMonitor;
+    private _allEvents: Event[] = [];   //all events of the log
+    private _events: Event[] =[];       //after filter & paging
     private _onNewSubscription: Subscription;
     //#endregion Constructor & Properties
 
 
     //#region Angular Methods
     ngOnInit(): void {
-        this._refreshList();
+        this._monitor = new PowershellMonitor(this.eventLog);
+        this._monitor.initialize().then((events :Event[]) => {
+            this._allEvents = events;
+            this.loading = false;
+            this._refreshList();
+        });
+
+        this._onNewSubscription = this._monitor.observable$.subscribe((newEvents :Event[]) => {
+            this._onNewEvents(newEvents);
+        });
     }
 
     ngOnDestroy(): void {
         if (this._onNewSubscription) this._onNewSubscription.unsubscribe();
+        if (this._monitor) this._monitor.dispose();
     }
     //#endregion Angular Methods
 
@@ -54,35 +67,32 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     }
 
     private _refreshList(): void {
+        this._events = this.filters.isEmpty() ? [...this._allEvents]
+        : this._allEvents.filter(e => this.filters.eventPassesFilters(e));
         // initialize ui variables
         this.viewModel = new ViewModel();
         this.unreadEventsUpdated.emit(false);
-        this.viewModel.loading = true;
         // get data
-        this.psService.getEvents(this.eventLog, this.filters)
-        .then((events: Event[]) => {
-            this._events = events;
-            this.viewModel.loading = false;
-            this._showNextItems();
-        });
-        
-
-        // subscription
-        if (this._onNewSubscription) this._onNewSubscription.unsubscribe();
-        this._onNewSubscription = this.psService.onNewEvents$(this.eventLog,null)
-        .pipe(filter(p => p.length > 0))
-        .subscribe((newEvents: Event[]) => this._onNewEvents(newEvents));
+        this._showNextItems();
     }
 
     private _onNewEvents(newEvents: Event[]): void {
-        //ui
+        // add to list
+        this._allEvents.unshift(...newEvents);
+        // check if there are new
+        const newEventsWithFilters = this.filters.isEmpty() || !!newEvents.find(e => this.filters.eventPassesFilters(e));
+        if (!newEventsWithFilters) return;
+        //notify ui
         this.viewModel.hasNew = true;
         this.unreadEventsUpdated.emit(true);
     }
 
     private _clearEvents(): void {
-        this.psService.clearEventLog(this.eventLog)
-        .then(() => this._refreshList());
+        PowershellCommands.clearEventLog(this.eventLog)
+        .then(() => {
+            this._allEvents = [];
+            this._refreshList();
+        });
     }
     //#endregion Implementation
 

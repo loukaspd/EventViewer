@@ -32,7 +32,7 @@ export class PsCommandExecutor {
         if (this.MOCK) return Promise.resolve(this.MOCK_RESULT(commands));
         //#endregion Mock Result
         
-        commands.length > 1 ? console.table(commands) : console.log(commands.last());    //REMOVE
+        //commands.length > 1 ? console.table(commands) : console.log(commands.last());    //TODO REMOVE
         const _ps = this._initShell();
         const commandPromise: Promise<string> = _ps.addCommand('[Console]::OutputEncoding = [System.Text.Encoding]::UTF8')
         .then(Promise.all(commands.map(c => _ps.addCommand(c))))

@@ -12,9 +12,6 @@ import { NZ_I18N, en_US } from 'ng-zorro-antd';  //used by datepicker
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 registerLocaleData(en);
-//#region Services
-import { PowershellService } from './services/powershell/powershell.service';
-//#endregion Services
 //#region Components
 import { AppComponent } from './app.component';
 import { MainComponent } from './components/main.component'
@@ -53,8 +50,7 @@ import { EventIconComponent } from './components/shared/event-icon/event-icon.co
     BrowserAnimationsModule
   ],
   providers: [
-    PowershellService
-    ,{ provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent],
 })

@@ -1,46 +1,66 @@
-import { Observable, defer, interval } from "rxjs";
+import { Observable, defer, interval, Subject } from "rxjs";
 import {concatMap} from 'rxjs/operators'
 import { Event } from "../../types/Event";
-import { PowershellCommands, GetEventsParams } from "./powershell-commands";
-import { EventFiltersVm } from "../../types/viewmodels/EventFiltersVm";
+import { PowershellCommands } from "./powershell-commands";
 import { EventLog } from "../../types/EventLog";
+import { Constants } from "../../types/Constants";
+
 
 export class PowershellMonitor {
+    //#region Private Fields
     private _eventLog: EventLog;
-    private _filters: EventFiltersVm;
-
-    constructor(eventLog: EventLog, filters:EventFiltersVm) {
-        this._eventLog = eventLog;
-        this._filters = filters;
-        this.observable$ = interval(1000).pipe(   //every one second
-            concatMap(() => this._getLogs())
-        );
-    }
-    
     private _lastEvent: Event;
-    public observable$: Observable<Event[]>;
+    private _subject = new Subject<Event[]>();
+    private _timeout :NodeJS.Timeout;
+    //#endregion Private Fields
+
+    //#region Public Api
+    
+    public observable$: Observable<Event[]> = this._subject.asObservable();
+    constructor(eventLog: EventLog) {
+        this._eventLog = eventLog;
+        // this.observable$ = interval(2000).pipe(   //every two seconds
+        //     concatMap(() => this._getLogs())
+        // );
+    }
+
+    public initialize() :Promise<Event[]> {
+        return PowershellCommands.getEvents(this._eventLog,null)
+        .then(events => {
+            this._lastEvent = events[0];
+            this._timeout = setTimeout(() => {
+                this._getLogs();
+            }, Constants.MonitorIntervalMilli);
+            return events;
+        });
+    }
+
+    public dispose() {
+        clearTimeout(this._timeout);
+    }
+
+    //#endregion Public Api
+    
     
     //#region Implementation
 
-    private _getLogs(): Observable<Event[]> {
-        const logsPromise: Promise<Event[]> = 
-        PowershellCommands.getEvents(new GetEventsParams(this._eventLog, this._filters)
-        ,this._lastEvent ? this._lastEvent.originalTimeString : undefined
-        , this._lastEvent ? undefined : 1)
-        .then((newLogs:Event[]) => {
-            if (!(newLogs || []).length) return [];
-
-            if (!this._lastEvent) {
-                this._lastEvent = newLogs[0];
-                return [];
-            }
-
-            newLogs = newLogs.filter(newLog => newLog.Index > this._lastEvent.Index);
-            if (newLogs.length) this._lastEvent = newLogs[0];
-            return newLogs;
-        });
+    private _getLogs(): void{
+        const now = new Date();
+        console.log('executing query', `${now.getMinutes()}:${now.getSeconds()}`); //TODO remove
         
-        return defer(() => logsPromise);
+        PowershellCommands.getEvents(this._eventLog, this._lastEvent)
+        .then((newEvents :Event[]) => {
+            newEvents = newEvents.filter(newLog => newLog.Index > this._lastEvent.Index);
+            if (newEvents.length > 0) {
+                this._lastEvent = newEvents[0];
+                this._subject.next(newEvents);
+            }
+            
+            
+            this._timeout = setTimeout(() => {
+                this._getLogs();
+            }, Constants.MonitorIntervalMilli);
+        });
     }
     //#endregion Implmenetation
 }

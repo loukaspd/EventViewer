@@ -1,7 +1,6 @@
 //#region imports
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventLog } from '../../types/EventLog';
-import { PowershellService } from '../../services/powershell/powershell.service';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { Subscription, fromEvent } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';

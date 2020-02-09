@@ -5,5 +5,6 @@ export enum EventEntryTypes {
 };
 
 export class Constants {
+    public static MonitorIntervalMilli = 2000;
     public static PageNumber= 50;
 }

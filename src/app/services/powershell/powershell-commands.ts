@@ -48,12 +48,15 @@ export class PowershellCommands {
     //#endregion
 
     //#region Events
-    public static getEvents(params:GetEventsParams, after: string, newest?: number) : Promise<Event[]> {
-        let commands = params.buildCommand(after);
-        if (newest) commands[commands.length-1] += ` -Newest ${newest}`;
-        
-        commands[commands.length-1] += ' ' + PowershellCommands._selectEventCommand;
-        return PsCommandExecutor.executeCommand(commands)
+    public static getEvents(eventLog: EventLog, lastEvent?:Event) : Promise<Event[]> {
+        //build command
+        let command = `Get-EventLog -LogName "${eventLog.log}"`;
+        if (!!eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
+        if (!!lastEvent) command += ` -After "${lastEvent.originalTimeString}"`;
+        //add select part
+        command += PowershellCommands._selectEventCommand;
+        //execute and parse
+        return PsCommandExecutor.executeCommand([command])
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
@@ -99,73 +102,4 @@ export class PowershellCommands {
     // private regex: RegExp = /^Index\s+:\s(\d+)\n^EntryType\s+:\s(\D+)\n^InstanceId\s+:\s(\d+)\n^Message\s+:\s((.|\n)+?(?=^Category))^Category\s+:\s(.+)\n^CategoryNumber\s+:\s(\d+)\n^ReplacementStrings\s+:\s((.|\n)+?(?=^Source))^Source\s+:\s(.*)\n^TimeGenerated\s+:\s(.*)\n^TimeWritten\s+:\s(.*)\n^UserName\s+:\s(.*)/mg;
 
     //#endregion Events
-}
-
-
-export class GetEventsParams {
-    public computerName: string;
-    public log: string;
-
-    public eventEntryTypes: string[] = [];
-    public dateFrom: Date;
-    public dateTo: Date;
-    public searchTerm: string = '';
-
-    constructor(eventLog: EventLog, filters?: EventFiltersVm) {
-        this.copyFromEventLog(eventLog);
-        if (!!filters) this.copyFromFilters(filters);
-    }
-
-    public copyFromEventLog(eventLog: EventLog):void {
-        this.computerName = eventLog.computerName;
-        this.log = eventLog.log;
-    }
-
-    public copyFromFilters(filters: EventFiltersVm):void {
-        this.eventEntryTypes = [...filters.eventEntryTypes];
-        this.dateFrom = filters.dateFrom;
-        this.dateTo = filters.dateTo;
-        this.searchTerm = filters.searchTerm;
-    }
-
-
-    /**
-     * returns array of commands that sould be executed.
-     * The last array element is the main command. 
-     * Elements that are before it declare variables that are used in the main command.
-     * @param after specify the after param that should be used, that has higher hierarchy than the filters.
-     */
-    public buildCommand(after: string): string[] {
-        let result = [];
-        let command = `Get-EventLog -LogName "${this.log}"`;
-        if (this.computerName) command += ` -ComputerName "${this.computerName}"`;
-
-        if (this.dateTo) {
-            result.push(`$before = ${this._toPsDate(this.dateTo)}`);
-            command += ` -Before $before`;
-        } 
-
-        if (this.eventEntryTypes.length > 0) {
-            command += ` -EntryType ${this.eventEntryTypes.join(',')}`;
-        }
-
-        if (!!this.searchTerm) {
-            command += ` -Message "*${this.searchTerm}*"`;
-        }
-        
-        //after
-        if (after) command += ` -After "${after}"`;
-        else if (!!this.dateFrom) {
-            result.push(`$after = ${this._toPsDate(this.dateFrom)}`);
-            command += ` -After $after`;
-        }
-
-        return [...result,command];
-    }
-
-
-    private _toPsDate(date: Date): string {
-        const dateAsString = date.toLocaleString('en-GB', { timeZone: 'UTC' });
-        return `[datetime]::parseexact(\'${dateAsString}\', \'dd/MM/yyyy, HH:mm:ss\', $null)`;  //TODO
-    }
 }
