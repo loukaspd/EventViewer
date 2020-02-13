@@ -39,8 +39,14 @@ export class PsCommandExecutor {
         .then(() => _ps.invoke())
         .catch(e => {
             console.error(e);
-            this._initShell();
             return '';
+        })
+        .finally(() => {
+            _ps.dispose()
+            .catch(e => {
+                console.error(`error while disposing Shell`);
+                console.error(e);
+            })
         });
 
         if (!timeout) return commandPromise;
