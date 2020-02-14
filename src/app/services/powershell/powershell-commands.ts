@@ -9,7 +9,7 @@ export class PowershellCommands {
         let command = `Clear-EventLog -LogName "${eventLog.log}"`;
         if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         
-        return PsCommandExecutor.executeCommand([command]);
+        return PsCommandExecutor.executeCommand(command, false);
     }
 
     //#region Event Log Sources
@@ -18,7 +18,7 @@ export class PowershellCommands {
         if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         command += ` |Select-Object Source -Unique`;
         
-        return PsCommandExecutor.executeCommand([command])
+        return PsCommandExecutor.executeCommand(command, true)
         .then((output :string) => GlobalUtils
         .splitLines(output)
         .map(l => l.trim())
@@ -34,7 +34,7 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
-        return PsCommandExecutor.executeCommand([command])
+        return PsCommandExecutor.executeCommand(command, true)
         .then(output => PowershellCommands._parseEventViewersList(output))
         .then(events => {
             events.forEach(e => e.computerName = computerName);
@@ -72,7 +72,7 @@ export class PowershellCommands {
         //add select part
         command += PowershellCommands._selectEventCommand;
         //execute and parse
-        return PsCommandExecutor.executeCommand([command])
+        return PsCommandExecutor.executeCommand(command, true)
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
