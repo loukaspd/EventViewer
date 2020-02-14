@@ -1,5 +1,5 @@
 //#region imports
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { GlobalUtils } from '../../../services/global-utils';
 import { EventEntryTypes } from '../../../types/Constants';
 import { EventFiltersVm } from '../../../types/viewmodels/EventFiltersVm';
@@ -13,6 +13,8 @@ export class EventViewerFiltersComponent {
     //#region Public Api
     @Output()
     onFiltersChanged: EventEmitter<EventFiltersVm> = new EventEmitter<EventFiltersVm>();
+    @Input()
+    public sources: string[] = [];
     //#endregion Public Api
     //#region Constructor & Properties
     constructor() { }

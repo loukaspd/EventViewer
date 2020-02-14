@@ -2,6 +2,7 @@
     <nz-sider>
         <event-viewer-filters
         (onFiltersChanged)="uiOnFiltersChanged($event)"
+        [sources]="sources"
         ></event-viewer-filters>
     </nz-sider>
     
@@ -28,8 +29,10 @@
             <div>
             <!-- icon -->
             <event-icon [eventType]="event.EntryType"></event-icon>
-    
+            <!-- Date -->
             {{event.TimeGenerated | date: 'd/M HH:mm:ss'}}
+            <!-- Source -->
+            {{event.Source}}
             </div>
         </ng-template>
     

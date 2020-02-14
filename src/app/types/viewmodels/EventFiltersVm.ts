@@ -6,6 +6,7 @@ export class EventFiltersVm {
     public dateFrom: Date;
     public dateTo: Date;
     public searchTerm: string = '';
+    public sources: string[] = [];
 
 
     //#region Business
@@ -13,7 +14,8 @@ export class EventFiltersVm {
         return this.eventEntryTypes.length == 0
         && this.dateFrom == null
         && this.dateTo == null
-        && this.searchTerm == '';
+        && this.searchTerm == ''
+        && this.sources.length == 0;
     }
 
     public eventPassesFilters(event: Event) :boolean {
@@ -28,6 +30,9 @@ export class EventFiltersVm {
         }
         if (this.searchTerm != '') {
             if (event.Message.toLowerCase().indexOf(this.searchTerm) < 0) return false;
+        }
+        if (this.sources.length > 0) {
+            if (this.sources.find(s => s == event.Source) == null) return false;
         }
 
         return true;

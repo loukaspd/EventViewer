@@ -16,6 +16,19 @@
 </nz-select>
 <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
 
+<!-- Sources Dropdown -->
+<nz-select
+      [nzMaxTagPlaceholder]="tagPlaceHolder"
+      style="width: 100%"
+      nzMode="multiple"
+      nzPlaceHolder="Sources"
+      [(ngModel)]="filters.sources"
+    >
+    <nz-option *ngFor="let option of sources" nzCustomContent [nzLabel]="option" [nzValue]="option">
+        {{option}}
+    </nz-option>
+</nz-select>
+
 <!-- Dates -->
 <nz-date-picker
       nzShowTime

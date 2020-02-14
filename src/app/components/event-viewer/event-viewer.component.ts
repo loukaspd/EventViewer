@@ -29,6 +29,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
     public viewModel= new ViewModel();
     public filters= new EventFiltersVm();
+    public sources: string[]= [];
 
     private _monitor: PowershellMonitor;
     private _allEvents: Event[] = [];   //all events of the log
@@ -51,6 +52,9 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         this._onNewSubscription = this._monitor.observable$.subscribe((newEvents :Event[]) => {
             this._onNewEvents(newEvents);
         });
+
+        PowershellCommands.eventLogSources(this.eventLog)
+        .then(sources => this.sources = sources);
     }
 
     ngOnDestroy(): void {
@@ -83,6 +87,11 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     private _onNewEvents(newEvents: Event[]): void {
         // add to list
         this._allEvents.unshift(...newEvents);
+        // add to sources if not exists
+        this.sources = [...this.sources, ...newEvents
+            .filter((e: Event) => this.sources.find(i => e.Source == i) == null)
+            .map(e => e.Source)
+        ];
         // check if there are new
         const newEventsWithFilters = this.filters.isEmpty() || !!newEvents.find(e => this.filters.eventPassesFilters(e));
         if (!newEventsWithFilters) return;

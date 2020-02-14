@@ -2,7 +2,6 @@ import { Event } from "../../types/Event";
 import { EventLog } from "../../types/EventLog";
 import { GlobalUtils } from "../global-utils";
 import { PsCommandExecutor } from "./powershell-command-executor";
-import { EventFiltersVm } from "../../types/viewmodels/EventFiltersVm";
 
 export class PowershellCommands {
 
@@ -12,6 +11,22 @@ export class PowershellCommands {
         
         return PsCommandExecutor.executeCommand([command]);
     }
+
+    //#region Event Log Sources
+    public static eventLogSources(eventLog: EventLog): Promise<string[]> {
+        let command = `Get-EventLog -LogName "${eventLog.log}"`;
+        if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
+        command += ` |Select-Object Source -Unique`;
+        
+        return PsCommandExecutor.executeCommand([command])
+        .then((output :string) => GlobalUtils
+        .splitLines(output)
+        .map(l => l.trim())
+        .filter(l => !!l.length)
+        .slice(2));
+    }
+    ////#endregion Event Log Sources
+
 
     //#region Event Log
     public static getEventLogs(computerName: string): Promise<EventLog[]> {
@@ -46,6 +61,7 @@ export class PowershellCommands {
     }
 
     //#endregion
+
 
     //#region Events
     public static getEvents(eventLog: EventLog, lastEvent?:Event) : Promise<Event[]> {
