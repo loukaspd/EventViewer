@@ -44,6 +44,8 @@ export class MainComponent implements OnInit{
   public closeTab(index: number): void {
     this.tabs.splice(index,1);
     this.tabsWithNewContent.splice(index,1);
+
+    if (this.tabs.length == 0) this._showSelectionDialog();
   }
 
   public onEventLogSelected(eventLog: EventLog) {
