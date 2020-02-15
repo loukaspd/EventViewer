@@ -80,6 +80,8 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         // initialize ui variables
         this.viewModel = new ViewModel();
         this.unreadEventsUpdated.emit(false);
+        this.viewModel.countAll = this._allEvents.length;
+        this.viewModel.countFiltered = this._events.length;
         // get data
         this._showNextItems();
     }
@@ -150,9 +152,13 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
 class ViewModel {
     public loading: boolean = false;
+    public hasNew: boolean = false;
+    //Counters
+    public countAll: number = 0;
+    public countFiltered: number = 0;
+    // List
     public events: Event[] = [];
     public hasMore: boolean = false;
-    public hasNew: boolean = false;
 
     constructor(events?: Event[]) {
         this.events = events || [];

@@ -8,7 +8,12 @@
     
     
     <nz-content>
-    <!-- Refersh Button -->
+    <!-- Number of logs indicator -->
+    <div *ngIf="!viewModel.loading && viewModel.countAll > 0">
+        <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
+    </div>
+
+    <!-- Clear & Refersh Buttons -->
     <div style="margin-left:5px; margin-bottom: 10px;">
         <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
             <i nz-icon nzType="delete"></i>
