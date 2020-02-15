@@ -25,7 +25,7 @@ export class PowershellCommands {
         .filter(l => !!l.length)
         .slice(2));
     }
-    ////#endregion Event Log Sources
+    //#endregion Event Log Sources
 
 
     //#region Event Log
@@ -34,7 +34,7 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
-        return PsCommandExecutor.executeCommand(command, true)
+        return PsCommandExecutor.executeCommand(command, false, 90)
         .then(output => PowershellCommands._parseEventViewersList(output))
         .then(events => {
             events.forEach(e => e.computerName = computerName);
