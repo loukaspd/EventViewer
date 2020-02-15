@@ -7,24 +7,26 @@ import { Constants } from "../../types/Constants";
 
 export class PowershellMonitor {
     //#region Private Fields
-    private _eventLog: EventLog;
+    private readonly __eventLog: EventLog;
+    private readonly __subject = new Subject<Event[]>();
+    
+    private _isDisposed: boolean = false;
     private _lastEvent: Event;
-    private _subject = new Subject<Event[]>();
     private _timeout :NodeJS.Timeout;
     //#endregion Private Fields
 
     //#region Public Api
     
-    public observable$: Observable<Event[]> = this._subject.asObservable();
+    public observable$: Observable<Event[]> = this.__subject.asObservable();
     constructor(eventLog: EventLog) {
-        this._eventLog = eventLog;
+        this.__eventLog = eventLog;
         // this.observable$ = interval(2000).pipe(   //every two seconds
         //     concatMap(() => this._getLogs())
         // );
     }
 
     public initialize() :Promise<Event[]> {
-        return PowershellCommands.getEvents(this._eventLog,null)
+        return PowershellCommands.getEvents(this.__eventLog,null)
         .then(events => {
             if (!!events.length) {
                 this._lastEvent = events[0];
@@ -38,6 +40,7 @@ export class PowershellMonitor {
     }
 
     public dispose() {
+        this._isDisposed = true;
         clearTimeout(this._timeout);
     }
 
@@ -47,14 +50,15 @@ export class PowershellMonitor {
     //#region Implementation
 
     private _getLogs(): void{
-        PowershellCommands.getEvents(this._eventLog, this._lastEvent)
+        PowershellCommands.getEvents(this.__eventLog, this._lastEvent)
         .then((newEvents :Event[]) => {
             newEvents = newEvents.filter(newLog => !this._lastEvent || newLog.Index > this._lastEvent.Index);
             if (newEvents.length > 0) {
                 this._lastEvent = newEvents[0];
-                this._subject.next(newEvents);
+                this.__subject.next(newEvents);
             }
             
+            if(this._isDisposed) return;
             
             this._timeout = setTimeout(() => {
                 this._getLogs();
