@@ -1,11 +1,11 @@
 {
   "name": "event-viewer-pp",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
-    "type":"git",
-    "url":"https://github.com/loukaspd/EventViewer.git"
+    "type": "git",
+    "url": "https://github.com/loukaspd/EventViewer.git"
   },
-  "license" : "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "description": "EventViewer++",
   "author": {
     "name": "loukaspd",
@@ -55,7 +55,7 @@
     "codelyzer": "5.1.0",
     "conventional-changelog-cli": "2.0.21",
     "core-js": "3.1.4",
-    "electron": "6.0.10",
+    "electron": "7.1.12",
     "electron-builder": "21.2.0",
     "electron-reload": "1.5.0",
     "jasmine-core": "3.4.0",
