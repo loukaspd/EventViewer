@@ -1,5 +1,5 @@
 # EventViewer++
-
+![Build](https://github.com/loukaspd/EventViewer/workflows/Build/badge.svg)
 
 ## About
 Windows Event Viewer desktop application build with Angular using Electron.
