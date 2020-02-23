@@ -1,6 +1,9 @@
 name: Release when a tag is created on master branch
 
-on: push
+on:
+  create:
+    branches:
+      - master
 
 jobs:
   build:

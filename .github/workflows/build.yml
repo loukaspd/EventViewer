@@ -1,4 +1,4 @@
-name: Build Prod
+name: Build
 
 on: [push]
 
