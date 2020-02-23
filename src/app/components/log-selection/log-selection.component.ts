@@ -87,7 +87,14 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
 
     //#region UiCallbacks
     public UiOnItemSelected(item: EventLog): void {
-        this.modal.close(item);
+        this.modalService.confirm({
+            nzTitle: 'Which events to show?',
+            nzContent: '',
+            nzOkText: 'All events',
+            nzOnOk: () => this.modal.close({eventLog: item, showOnlyNew:false}),
+            nzCancelText: 'New Only',
+            nzOnCancel: () => this.modal.close({eventLog: item, showOnlyNew:true})
+          });
     }
 
     public UiOnSearchClicked(): void {

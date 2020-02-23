@@ -25,8 +25,8 @@ export class PowershellMonitor {
         // );
     }
 
-    public initialize() :Promise<Event[]> {
-        return PowershellCommands.getEvents(this.__eventLog,null)
+    public initialize(onlyNewEvents:boolean) :Promise<Event[]> {
+        return PowershellCommands.getEvents(this.__eventLog, onlyNewEvents, null)
         .then(events => {
             if (!!events.length) {
                 this._lastEvent = events[0];
@@ -35,7 +35,7 @@ export class PowershellMonitor {
             this._timeout = setTimeout(() => {
                 this._getLogs();
             }, Constants.MonitorIntervalMilli);
-            return events;
+            return onlyNewEvents ? [] : events;
         });
     }
 
@@ -50,7 +50,7 @@ export class PowershellMonitor {
     //#region Implementation
 
     private _getLogs(): void{
-        PowershellCommands.getEvents(this.__eventLog, this._lastEvent)
+        PowershellCommands.getEvents(this.__eventLog, false, this._lastEvent)
         .then((newEvents :Event[]) => {
             newEvents = newEvents.filter(newLog => !this._lastEvent || newLog.Index > this._lastEvent.Index);
             if (newEvents.length > 0) {

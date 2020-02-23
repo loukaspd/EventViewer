@@ -24,6 +24,8 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
     @Input()
     public eventLog: EventLog;
+    @Input()
+    public showOnlyNewEvents: boolean;
     @Output()
     public unreadEventsUpdated = new EventEmitter<boolean>();
 
@@ -44,7 +46,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         this.changeDetRef.markForCheck();
         
         this._monitor = new PowershellMonitor(this.eventLog);
-        this._monitor.initialize().then((events :Event[]) => {
+        this._monitor.initialize(this.showOnlyNewEvents).then((events :Event[]) => {
             this._allEvents = events;
             this._refreshList();
         });

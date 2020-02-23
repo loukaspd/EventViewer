@@ -12,7 +12,10 @@
         <i nz-icon nzType="close" class="ant-tabs-close-x" (click)="closeTab(i)"></i>
       </div>
     </ng-template>
-    <event-viewer [eventLog]="tab" (unreadEventsUpdated)="tabsWithNewContent[i]=$event"></event-viewer>
+    <event-viewer
+    [eventLog]="tab"
+    [showOnlyNewEvents]="tabsShowOnlyNewEvents[i]"
+    (unreadEventsUpdated)="tabsWithNewContent[i]=$event"></event-viewer>
   </nz-tab>
 </nz-tabset>
 

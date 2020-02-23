@@ -64,11 +64,12 @@ export class PowershellCommands {
 
 
     //#region Events
-    public static getEvents(eventLog: EventLog, lastEvent?:Event) : Promise<Event[]> {
+    public static getEvents(eventLog: EventLog, onlyLastEvent: boolean, lastEvent?:Event) : Promise<Event[]> {
         //build command
         let command = `Get-EventLog -LogName "${eventLog.log}"`;
         if (!!eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         if (!!lastEvent) command += ` -After "${lastEvent.originalTimeString}"`;
+        else if (onlyLastEvent) command += " -Newest 1";
         //add select part
         command += PowershellCommands._selectEventCommand;
         //execute and parse

@@ -1,7 +1,7 @@
 //#region imports
 import { Component, OnInit } from '@angular/core';
 import { EventLog } from '../types/EventLog';
-import { NzModalService, NzTabChangeEvent } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd';
 import { LogSelectionComponent } from './log-selection/log-selection.component';
 //#endregion imports
 
@@ -14,6 +14,7 @@ export class MainComponent implements OnInit{
   constructor(private modalService: NzModalService) { }
   public activeIndex: number = 0;
   public tabs: EventLog[] = [];
+  public tabsShowOnlyNewEvents: boolean[] = [];
   public tabsWithNewContent: boolean[] = [];
   //#endregion Constructor & Properties
 
@@ -32,7 +33,7 @@ export class MainComponent implements OnInit{
       ,nzClosable: false
       ,nzFooter: null
     });
-    modal.afterClose.subscribe((eventViewer: EventLog) => this.onEventLogSelected(eventViewer));
+    modal.afterClose.subscribe(param => this.onEventLogSelected(param));
   }
   //#endregion Implementation
 
@@ -43,24 +44,24 @@ export class MainComponent implements OnInit{
 
   public closeTab(index: number): void {
     this.tabs.splice(index,1);
+    this.tabsShowOnlyNewEvents.splice(index,1);
     this.tabsWithNewContent.splice(index,1);
 
     if (this.tabs.length == 0) this._showSelectionDialog();
   }
 
-  public onEventLogSelected(eventLog: EventLog) {
-    if (!eventLog) return;
-    const index = this.tabs.findIndex(t => t.IsSame(eventLog));
+  public onEventLogSelected(param: {eventLog: EventLog, showOnlyNew:boolean}) {
+    if (!param.eventLog) return;
+    const index = this.tabs.findIndex(t => t.IsSame(param.eventLog));
     if (index >=0) {
       this.activeIndex = index;
       return;
     }
-    this.tabs.push(eventLog);
+    this.tabs.push(param.eventLog);
+    this.tabsShowOnlyNewEvents.push(param.showOnlyNew);
     this.tabsWithNewContent.push(false);
     this.activeIndex = this.tabs.length-1;
   }
   //#endregion Ui Callbacks
-
-
 }
 
