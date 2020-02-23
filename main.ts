@@ -64,7 +64,7 @@ try {
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
     createWindow();
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
   });
 
   // Quit when all windows are closed.
@@ -76,13 +76,13 @@ try {
     }
   });
 
-  app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-      createWindow();
-    }
-  });
+  // app.on('activate', () => {
+  //   // On OS X it's common to re-create a window in the app when the
+  //   // dock icon is clicked and there are no other windows open.
+  //   if (win === null) {
+  //     createWindow();
+  //   }
+  // });
 
 } catch (e) {
   // Catch Error
