@@ -4,6 +4,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.0.3] 2020/02/24
+
+### Added
+- **[event-viewer]:** adds source to Events List
+- **[event-viewer]:** adds source to filters
+- **[event-viewer]:** show number of Events indicator
+- **[log-selection]:** adds functionality to show only new Events
+
+### Changed
+- **[Packages]:** updates electron 6.0.10 -> 7.1.12
+- filtering is done in memory
+- **[main-component]:** show selection dialog when all tabs close
+
+### Fixed
+- powershell instance is disposed after each command is executed
+
+
 ## [0.0.2] 2019/11/11
 
 ### Added
@@ -12,7 +29,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - **[Clear Logs]** checks if running the app as administrator
-
 
 ### Fixed
 - removes timeout when executing powershell requests
