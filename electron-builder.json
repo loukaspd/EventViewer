@@ -1,9 +1,5 @@
 {
   "productName": "EventViewer++",
-  "publish": {
-    "provider": "github",
-    "token": "GH_TOKEN"
-  },
   "directories": {
     "output": "release/"
   },
