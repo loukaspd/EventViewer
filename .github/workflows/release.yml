@@ -1,0 +1,24 @@
+name: Release when a tag is created on master branch
+
+on: push
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Check out Git repository
+      uses: actions/checkout@v2
+      
+    - name: Install Node.js, NPM & Yarn
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10
+
+    - name: Npm Install
+      run: npm install
+
+    - name: release to github
+      run: npm run release:windows
+      env:
+        GH_TOKEN: ${{ secrets.Github_AccessToken }}
