@@ -19,6 +19,7 @@ import { EventViewerComponent } from './components/event-viewer/event-viewer.com
 import { EventViewerFiltersComponent } from './components/event-viewer/event-viewer-filters/event-viewer-filters.component';
 import { LogSelectionComponent } from './components/log-selection/log-selection.component';
 import { EventIconComponent } from './components/shared/event-icon/event-icon.component';
+import { EventEntryItemComponent } from './components/event-viewer/event-entry-item/event-entry-item.component';
 //#endregion Components
 //#endregion Imports
 
@@ -31,6 +32,7 @@ import { EventIconComponent } from './components/shared/event-icon/event-icon.co
     ,EventViewerFiltersComponent
     
     ,EventIconComponent
+    ,EventEntryItemComponent
   ],
   entryComponents: [
     LogSelectionComponent //used inside dialog

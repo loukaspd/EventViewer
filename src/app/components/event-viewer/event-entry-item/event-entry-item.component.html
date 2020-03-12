@@ -1,0 +1,9 @@
+<div class="chat-message">
+    <div class="chat-message-text" [ngClass]="event.EntryType">
+        <span style="white-space: pre-wrap;">{{event.Message}}</span>
+    </div>
+
+    <div class="chat-message-meta">
+        <span>{{event.TimeGenerated | date: 'd/M HH:mm:ss'}}</span>
+    </div>
+</div>
