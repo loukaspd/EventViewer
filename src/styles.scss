@@ -11,13 +11,14 @@ html, body {
   height: 100% !important;
 }
 
-.white-color {
-  color: #ffffff
-}
-
 .margin-auto {
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+// Flex
+.flex-container {
+  display: flex;
 }
 
 .fab-button {

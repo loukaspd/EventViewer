@@ -1,11 +1,19 @@
 <div class="event-entry-container">
+    <!-- Bubble Content -->
     <div class="event-entry-bubble">
-        <div class="event-entry-bubble-flex-container">
+        <!-- Indicator & Message -->
+        <div class="flex-container">
             <div class="event-type-indicator" [ngClass]="event.EntryType"></div>
-            <span class="event-message" style="white-space: pre-wrap;">{{event.Message}}</span>
+            <span class="event-message" style="white-space: pre-wrap;">{{uiEventMessage}}</span>
+        </div>
+
+        <!-- Expand - Collapse toggle -->
+        <div class="flex-container togle-container" *ngIf="uiHasBigContent">
+            <span class="toggle" (click)="uiOnToggleClicked()">{{uiShowingAllContent ? 'collapse' : 'expand'}}</span>
         </div>
     </div>
 
+    <!-- Date (under bubble)-->
     <div class="event-entry-date">
         <span>{{event.TimeGenerated | date: 'd/M HH:mm:ss'}}</span>
     </div>

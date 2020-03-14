@@ -11,10 +11,7 @@
     background: white none repeat scroll 0 0;
 }
 
-.event-entry-bubble-flex-container {
-    display: flex;
-}
-
+/* Indicator */
 .event-type-indicator {
     align-self: center;
     padding-right: 8px;
@@ -27,6 +24,16 @@
     height: 8px;
     background-color: currentColor;
     border-radius: 50%;
+}
+
+/* Expand-collapse toggle*/
+.event-entry-bubble .togle-container {
+    justify-content: flex-end;
+}
+
+.event-entry-bubble .toggle {
+    font-size: 11px;
+    cursor: pointer;
 }
 
 /* Date */
