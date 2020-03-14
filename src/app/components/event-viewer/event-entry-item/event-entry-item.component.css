@@ -1,45 +1,50 @@
-.chat-message {
+.event-entry-container {
     margin-bottom: 15px;
 }
 
-.chat-message-text{
-    color: #ffffff;
+.event-entry-bubble {
     padding: 5px 10px;
-    display: inline-block;
     border-radius: 10px;
+    display: inline-block;
     position: relative;
     text-align: left;
-    background: #ebebeb none repeat scroll 0 0;
+    background: white none repeat scroll 0 0;
 }
 
-.chat-message-meta {
+.event-entry-bubble-flex-container {
+    display: flex;
+}
+
+.event-type-indicator {
+    align-self: center;
+    padding-right: 8px;
+}
+
+.event-type-indicator:before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: currentColor;
+    border-radius: 50%;
+}
+
+/* Date */
+.event-entry-date {
     margin-top: 5px;
     font-size: 13px;
 }
 
-.chat-message.chat-message-left .chat-message-text:after {
-    content: " ";
-    position: absolute;
-    width: 0;
-    height: 0;
-    left: -10px;
-    right: auto;
-    top: auto;
-    bottom: 0;
-    border: 6px solid #262B2E;
-    border-color: transparent #262B2E #262B2E transparent;
+/* Bubble Colors */
+.Information {
+    color: #486274;
 }
 
-/* Colors */
-.chat-message-text.Information {
-    background-color: #486274;
+.Warning {
+    color: #ffae42;
+    /* color: #646464; */
 }
 
-.chat-message-text.Warning {
-    background-color: #ffae42;
-    color: #646464;
-}
-
-.chat-message-text.Error {
-    background-color: #FF9494;
+.Error {
+    color: #FF9494;
 }

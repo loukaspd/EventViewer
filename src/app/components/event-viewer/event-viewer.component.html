@@ -29,17 +29,6 @@
     *ngFor="let event of viewModel.events"
     [event]="event">
     </event-entry-item>
-    <!-- <div 
-    *ngFor="let event of viewModel.events"
-    class="chat-message">
-        <div class="chat-message-text" [ngClass]="event.EntryType">
-            <span style="white-space: pre-wrap;">{{event.Message}}</span>
-        </div>
-
-        <div class="chat-message-meta">
-            <span>{{event.TimeGenerated | date: 'd/M HH:mm:ss'}}</span>
-        </div>
-    </div> -->
 
     <!-- Load More -->
     <div class="loadmore">
