@@ -5,7 +5,9 @@
     </div>
 
     <ul id="event-logs-ul">
-        <li *ngFor="let eventLog of eventLogs; let i = index"
+        <li 
+        *ngFor="let eventLog of eventLogs; let i = index"
+        (click)="uiOnItemClicked(i)"
         [ngClass]="{'active': activeIndex == i}"
         >
         <div>
