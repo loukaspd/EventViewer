@@ -1,7 +1,8 @@
 //#region imports
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 
 import { EventLog } from '../../types/EventLog';
+import { EventEmitter } from '@angular/core';
 //#endregion imports
 
 @Component({
@@ -14,6 +15,8 @@ export class EventsListComponent {
     @Input() public eventLogs: EventLog[];
     @Input() public activeIndex: Number;
 
+    @Output() public onAddClicked = new EventEmitter<void>();
+
     constructor() { }
     //#endregion Constructor & Properties
 
@@ -25,7 +28,7 @@ export class EventsListComponent {
 
     //#region UiMethods
     public uiOnAddClicked(): void {
-        
+        this.onAddClicked.emit();
     }
     //#endregion UiMethods
 
