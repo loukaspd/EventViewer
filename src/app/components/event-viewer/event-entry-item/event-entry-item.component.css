@@ -8,12 +8,12 @@
     display: inline-block;
     position: relative;
     text-align: left;
-    background: white none repeat scroll 0 0;
+    background: #f1f0f0 none repeat scroll 0 0;
+    color:black;
 }
 
 /* Indicator */
 .event-type-indicator {
-    align-self: center;
     padding-right: 8px;
 }
 
@@ -38,11 +38,11 @@
 
 /* Date */
 .event-entry-date {
-    margin-top: 5px;
-    font-size: 13px;
+    margin-top: 3px;
+    font-size: 12px;
 }
 
-/* Bubble Colors */
+/* Indicator Colors */
 .Information {
     color: #486274;
 }

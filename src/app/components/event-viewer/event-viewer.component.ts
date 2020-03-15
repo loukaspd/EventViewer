@@ -15,6 +15,7 @@ import { PowershellMonitor } from '../../services/powershell/powershell-monitor'
 @Component({
     selector: 'event-viewer',
     templateUrl: 'event-viewer.component.html'
+    ,styleUrls: ['event-viewer.component.css']
     ,changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventViewerComponent implements OnInit, OnDestroy {

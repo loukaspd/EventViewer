@@ -2,7 +2,39 @@
   <i nz-icon nzType="plus"></i>
 </button>
 
-<!-- Code Initial -->
+
+<div class="main-container">
+  <div id="sidebar">
+    <!-- Title -->
+    <div class="title">
+      Event Viewer++
+    </div>
+
+    <events-list
+    [eventLogs]="tabs"
+    [activeIndex]="activeIndex"
+    ></events-list>
+  </div>
+  
+  
+  <!-- Events List-->
+  <div style="height:100%">
+    <event-viewer
+    *ngFor="let tab of tabs; let i = index"
+    [hidden]="activeIndex != i"
+    
+    [eventLog]="tab"
+    [showOnlyNewEvents]="tabsShowOnlyNewEvents[i]"
+    (unreadEventsUpdated)="tabsWithNewContent[i]=$event"
+    >
+  
+    </event-viewer>
+  </div>
+  
+
+</div>
+
+<!--
 <nz-tabset [nzType]="'card'" [(nzSelectedIndex)]="activeIndex">
   <nz-tab *ngFor="let tab of tabs; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
@@ -18,34 +50,4 @@
     (unreadEventsUpdated)="tabsWithNewContent[i]=$event"></event-viewer>
   </nz-tab>
 </nz-tabset>
-
-<!-- Improvements -->
-<!-- <nz-layout class="left-layout">
-  <nz-sider>
-    <div class="logo">
-      <h3 class="white-color margin-auto">EventViewer++</h3>
-    </div>
-    <ul nz-menu nzTheme="dark" nzMode="inline">
-      <ng-container *ngFor="let tab of tabs; let i = index">
-        <li nz-menu-item>
-          <i nz-icon nzType="file"></i>
-          <span>{{ tabsWithNewContent[i] ? '' : tab.UiTabLabel() }}</span>
-          <i nz-icon nzType="close" class="ant-tabs-close-x" (click)="closeTab(i)"></i>
-        </li>
-      </ng-container>
-    </ul>
-  </nz-sider>
-  <nz-layout class="right-layout">
-    <nz-header>
-      <p>Other info</p>
-    </nz-header>
-    <nz-content>
-      <div class="inner-content">
-        <event-viewer [eventLog]="tab" (unreadEventsUpdated)="tabsWithNewContent[i]=$event"></event-viewer>
-      </div>
-    </nz-content>
-    <nz-footer>
-      <p>EventViewer++ Copyright 2019</p>
-    </nz-footer>
-  </nz-layout>
-</nz-layout> -->
+-->

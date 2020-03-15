@@ -7,7 +7,8 @@ import { LogSelectionComponent } from './log-selection/log-selection.component';
 
 @Component({
   selector: 'main-component',
-  templateUrl: 'main.component.html'
+  templateUrl: 'main.component.html',
+  styleUrls: ['main.component.css']
 })
 export class MainComponent implements OnInit{
   //#region Constructor & Properties
@@ -51,7 +52,7 @@ export class MainComponent implements OnInit{
   }
 
   public onEventLogSelected(param: {eventLog: EventLog, showOnlyNew:boolean}) {
-    if (!param.eventLog) return;
+    if (!param || !param.eventLog) return;
     const index = this.tabs.findIndex(t => t.IsSame(param.eventLog));
     if (index >=0) {
       this.activeIndex = index;

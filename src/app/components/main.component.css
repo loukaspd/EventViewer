@@ -1,0 +1,22 @@
+.main-container {
+    height: 100%;
+    display: flex;
+}
+
+
+#sidebar {
+    height: 100%;
+    width: 220px;
+    background-color: #4d394b;
+    color: #ffffff;
+}
+
+#sidebar .title {
+    height: 53px;
+    line-height: 53px;
+    padding: 0 1rem;
+    background: #3e313c;
+    border-bottom: 2px solid #372c36;
+    font-weight: 900;
+    font-size: 16px;
+}

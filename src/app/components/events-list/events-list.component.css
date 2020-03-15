@@ -1,0 +1,52 @@
+#events-list-container {
+    margin-top: 18px;
+}
+
+
+/* title */
+.title-container {
+    display: flex;
+    align-items: center;
+}
+
+.title-container span {
+    color: #ab9ba9;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+}
+
+#add-btn {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* list */
+#event-logs-ul {
+    list-style-type: none;
+    padding: 0;
+    /* color: #ab9ba9; */
+}
+
+#event-logs-ul li {
+    padding-left: 10px;
+    height: 24px;
+    line-height: 24px;
+    margin-right: 17px;
+    color: #FFFFFF;
+
+    cursor: pointer;
+}
+
+#event-logs-ul li.active {
+    background-color: rgb(76, 150, 137);
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+#event-logs-ul li:hover {
+    background-color: blue; /*TODO color */
+}

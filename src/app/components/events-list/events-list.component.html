@@ -1,0 +1,17 @@
+<div>
+    <div class="title-container container">
+        <span>Event Logs</span>
+        <img (click)="uiOnAddClicked()" id="add-btn" src="https://img.icons8.com/ios/50/ab9ba9/add.png"/>
+    </div>
+
+    <ul id="event-logs-ul">
+        <li *ngFor="let eventLog of eventLogs; let i = index"
+        [ngClass]="{'active': activeIndex == i}"
+        >
+        <div>
+            <span>{{eventLog.UiTabLabel()}}</span>
+            <span class="unread"></span>
+        </div>
+        </li>
+    </ul>
+</div>

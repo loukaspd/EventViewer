@@ -20,6 +20,7 @@ import { EventViewerFiltersComponent } from './components/event-viewer/event-vie
 import { LogSelectionComponent } from './components/log-selection/log-selection.component';
 import { EventIconComponent } from './components/shared/event-icon/event-icon.component';
 import { EventEntryItemComponent } from './components/event-viewer/event-entry-item/event-entry-item.component';
+import { EventsListComponent } from './components/events-list/events-list.component';
 //#endregion Components
 //#endregion Imports
 
@@ -28,6 +29,8 @@ import { EventEntryItemComponent } from './components/event-viewer/event-entry-i
     AppComponent
     ,MainComponent
     ,LogSelectionComponent
+
+    ,EventsListComponent
     ,EventViewerComponent
     ,EventViewerFiltersComponent
     
