@@ -48,7 +48,9 @@ export class MainComponent implements OnInit{
     this.tabsShowOnlyNewEvents.splice(index,1);
     this.tabsWithNewContent.splice(index,1);
 
-    if (this.tabs.length == 0) this._showSelectionDialog();
+    if (--this.activeIndex < 0) this.activeIndex = Math.max(this.tabs.length -1, 0);
+
+    if (this.tabs.length == 0) this._showSelectionDialog(); 
   }
 
   public onEventLogSelected(param: {eventLog: EventLog, showOnlyNew:boolean}) {

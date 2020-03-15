@@ -8,7 +8,9 @@
     <events-list
     [eventLogs]="tabs"
     [activeIndex]="activeIndex"
+    
     (onAddClicked)="onAddClicked()"
+    (onCloseClicked)="closeTab($event)"
     ></events-list>
   </div>
   

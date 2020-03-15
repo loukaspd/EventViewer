@@ -51,6 +51,7 @@
     background-color: blue; /*TODO color */
 }
 
+
 /* list unread indicator */
 #event-logs-ul .unread {
     color: #ffffff;
@@ -66,4 +67,20 @@
     float: right;
     margin-right: 3px;
     margin-top: 3px;
+}
+
+#event-logs-ul li:hover .unread {
+    display: none;
+}
+
+/* list close icon */
+#event-logs-ul .close {
+    float: right;
+    width: 24px;
+    height: 24px;
+    display: none;
+}
+
+#event-logs-ul li:hover .close {
+    display: block;
 }

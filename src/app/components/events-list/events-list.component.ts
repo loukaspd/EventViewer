@@ -16,6 +16,7 @@ export class EventsListComponent {
     @Input() public activeIndex: Number;
 
     @Output() public onAddClicked = new EventEmitter<void>();
+    @Output() public onCloseClicked = new EventEmitter<Number>();
 
     constructor() { }
     //#endregion Constructor & Properties
@@ -29,6 +30,10 @@ export class EventsListComponent {
     //#region UiMethods
     public uiOnAddClicked(): void {
         this.onAddClicked.emit();
+    }
+
+    public uiOnCloseClicked(index: Number): void {
+        this.onCloseClicked.emit(index);
     }
     //#endregion UiMethods
 
