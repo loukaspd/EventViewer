@@ -25,7 +25,7 @@ export class EventsListComponent {
 
     //#region UiMethods
     public uiOnAddClicked(): void {
-        console.log('hello');
+        
     }
     //#endregion UiMethods
 
