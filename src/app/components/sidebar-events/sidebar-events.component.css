@@ -33,9 +33,9 @@
 
 #event-logs-ul li {
     padding-left: 10px;
-    height: 24px;
-    line-height: 24px;
-    margin-right: 17px;
+    height: 26px;
+    line-height: 26px;
+    padding-right: 10px;
     color: #FFFFFF;
 
     cursor: pointer;
@@ -51,10 +51,13 @@
     background-color: rgb(62, 49, 60);
 }
 
+#event-logs-ul .flex-container {
+    align-items: center;
+}
+
 
 /* Name */
 .sidebar-name {
-    line-height: 26px;
     overflow-x: hidden;
     overflow-y: hidden;
     text-overflow: ellipsis;
@@ -64,19 +67,21 @@
 
 /* list unread indicator */
 .sidebar-unread-badge {
-    color: #ffffff;
-    background: #eb4d5c;
-    border-radius: 9px;
-    padding: 2px 9px;
-    font-size: 0.8rem;
-    line-height: 14px;
-    font-weight: 700;
-    vertical-align: baseline;
-    white-space: nowrap;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-    float: right;
-    margin-right: 3px;
-    margin-top: 3px;
+    margin-left: auto;
+    /* this will center the text */
+    display: inline-flex;
+    align-items: center;
+    /* dimensions */
+    height: 18px;
+    padding-left:9px;
+    padding-right:9px;
+    /* red circle outline */
+    background-color: rgb(235, 77, 92);
+    border-radius: 16px;
+    /* text style */
+    font-size:12px;
+    font-weight:700;
+    
 }
 
 #event-logs-ul li:hover .sidebar-unread-badge {
@@ -85,9 +90,9 @@
 
 /* list close icon */
 #event-logs-ul .sidebar-close-icon {
-    float: right;
-    width: 24px;
-    height: 24px;
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
     display: none;
 }
 
