@@ -5,14 +5,14 @@
       Event Viewer++
     </div>
 
-    <events-list
+    <sidebar-events
     [eventLogs]="tabs"
     [activeIndex]="activeIndex"
     
     (onAddClicked)="onAddClicked()"
     (onCloseClicked)="closeTab($event)"
     (onLogSelected)="activeIndex = $event"
-    ></events-list>
+    ></sidebar-events>
   </div>
   
   

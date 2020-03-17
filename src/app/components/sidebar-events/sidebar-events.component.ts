@@ -6,11 +6,11 @@ import { EventEmitter } from '@angular/core';
 //#endregion imports
 
 @Component({
-    selector: 'events-list',
-    templateUrl: 'events-list.component.html',
-    styleUrls: ['events-list.component.css']
+    selector: 'sidebar-events',
+    templateUrl: 'sidebar-events.component.html',
+    styleUrls: ['sidebar-events.component.css']
 })
-export class EventsListComponent {
+export class SidebarEventsComponent {
     //#region Constructor & Properties
     @Input() public eventLogs: EventLog[];
     @Input() public activeIndex: Number;
