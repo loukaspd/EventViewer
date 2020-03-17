@@ -10,10 +10,10 @@
         (click)="uiOnItemClicked(i)"
         [ngClass]="{'active': activeIndex == i}"
         >
-        <div>
-            <span>{{eventLog.UiTabLabel()}}</span>
-            <span class="unread">-</span>
-            <img (click)="uiOnCloseClicked(i)" class="close" src="https://img.icons8.com/ios/26/ab9ba9/delete-sign.png"/>
+        <div class="flex-container">
+            <span class="sidebar-name">{{eventLog.UiTabLabel()}}</span>
+            <span class="sidebar-unread-badge">-</span>
+            <img (click)="uiOnCloseClicked(i)" class="sidebar-close-icon" src="https://img.icons8.com/ios/26/ab9ba9/delete-sign.png"/>
         </div>
         </li>
     </ul>

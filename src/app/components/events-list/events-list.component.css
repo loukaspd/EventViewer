@@ -48,12 +48,22 @@
 }
 
 #event-logs-ul li:hover {
-    background-color: blue; /*TODO color */
+    background-color: rgb(62, 49, 60);
+}
+
+
+/* Name */
+.sidebar-name {
+    line-height: 26px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 
 /* list unread indicator */
-#event-logs-ul .unread {
+.sidebar-unread-badge {
     color: #ffffff;
     background: #eb4d5c;
     border-radius: 9px;
@@ -69,18 +79,18 @@
     margin-top: 3px;
 }
 
-#event-logs-ul li:hover .unread {
+#event-logs-ul li:hover .sidebar-unread-badge {
     display: none;
 }
 
 /* list close icon */
-#event-logs-ul .close {
+#event-logs-ul .sidebar-close-icon {
     float: right;
     width: 24px;
     height: 24px;
     display: none;
 }
 
-#event-logs-ul li:hover .close {
+#event-logs-ul li:hover .sidebar-close-icon {
     display: block;
 }
