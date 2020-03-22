@@ -62,7 +62,7 @@ export class MainComponent implements OnInit{
     }
     this.tabs.push(param.eventLog);
     this.tabsShowOnlyNewEvents.push(param.showOnlyNew);
-    this.tabsWithNewContent.push(false);
+    this.tabsWithNewContent.push(0);
     this.activeIndex = this.tabs.length-1;
   }
   //#endregion Ui Callbacks
