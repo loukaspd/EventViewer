@@ -16,7 +16,7 @@ export class MainComponent implements OnInit{
   public activeIndex: number = 0;
   public tabs: EventLog[] = [];
   public tabsShowOnlyNewEvents: boolean[] = [];
-  public tabsWithNewContent: boolean[] = [];
+  public tabsWithNewContent: Number[] = [];
   //#endregion Constructor & Properties
 
 

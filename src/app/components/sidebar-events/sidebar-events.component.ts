@@ -13,6 +13,7 @@ import { EventEmitter } from '@angular/core';
 export class SidebarEventsComponent {
     //#region Constructor & Properties
     @Input() public eventLogs: EventLog[];
+    @Input() public newEventsCount: Number[];
     @Input() public activeIndex: Number;
 
     @Output() public onAddClicked = new EventEmitter<void>();
