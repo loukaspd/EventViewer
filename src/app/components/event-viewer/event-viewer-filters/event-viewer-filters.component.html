@@ -1,48 +1,24 @@
-<!-- Search -->
-<input nz-input placeholder="Search Message" [(ngModel)]="filters.searchTerm" />
-
-<!-- Event Type Dropdown -->
-<nz-select
-      [nzMaxTagCount]="3"
-      [nzMaxTagPlaceholder]="tagPlaceHolder"
-      style="width: 100%"
-      nzMode="multiple"
-      nzPlaceHolder="Event Level"
-      [(ngModel)]="filters.eventEntryTypes"
-    >
-    <nz-option *ngFor="let option of eventLevels" nzCustomContent [nzLabel]="option" [nzValue]="option">
-        <event-icon [eventType]="option"></event-icon>{{option}}
-    </nz-option>
-</nz-select>
-<ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
-
-<!-- Sources Dropdown -->
-<nz-select
-      [nzMaxTagPlaceholder]="tagPlaceHolder"
-      style="width: 100%"
-      nzMode="multiple"
-      nzPlaceHolder="Sources"
-      [(ngModel)]="filters.sources"
-    >
-    <nz-option *ngFor="let option of sources" nzCustomContent [nzLabel]="option" [nzValue]="option">
-        {{option}}
-    </nz-option>
-</nz-select>
-
-<!-- Dates -->
-<nz-date-picker
-      nzShowTime
-      nzFormat="yyyy-MM-dd HH:mm:ss"
-      [(ngModel)]="filters.dateFrom"
-      nzPlaceHolder="Date From"
-></nz-date-picker>
-<nz-date-picker
-      nzShowTime
-      nzFormat="yyyy-MM-dd HH:mm:ss"
-      [(ngModel)]="filters.dateTo"
-      nzPlaceHolder="Date To"
-></nz-date-picker>
-
-<!-- Buttons -->
-<button nz-button [nzType]="'primary'" (click)="UiOnApplyClicked()">Apply</button>
-<button nz-button (click)="UiOnClearClicked()">Clear</button>
+<div class="flex-container">
+    <!-- Add Filter -->
+    <a nz-dropdown [nzDropdownMenu]="menu" 
+    nzTrigger="click"
+    nzClickHide="false">Filter<i nz-icon nzType="down"></i></a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+        <!-- Entry Type-->
+        <li *ngFor="let eventType of UiEventEntriesToShow()"
+        (click)="UiOnEventTypeClicked(eventType)" 
+        nz-menu-item
+        class="event-type-indicator" 
+        [ngClass]="eventType">{{eventType}}</li>
+        <li nz-menu-divider></li>
+        <!-- Search Input -->
+        <nz-input-group [nzAddOnAfter]="suffixButton">
+            <input type="text" nz-input placeholder="Search Message" id="searchInput" [(ngModel)]="filters.searchTerm"/>
+            <ng-template #suffixButton>
+                <button (click)="UiOnSearchMessageClicked()" nz-button nzType="primary" nzSearch>Apply</button>
+            </ng-template>
+        </nz-input-group>
+    </ul>
+    </nz-dropdown-menu>
+</div>

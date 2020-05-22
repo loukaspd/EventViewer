@@ -1,0 +1,12 @@
+.Information {
+    color: #486274;
+}
+
+.Warning {
+    color: #ffae42;
+    /* color: #646464; */
+}
+
+.Error {
+    color: #FF9494;
+}

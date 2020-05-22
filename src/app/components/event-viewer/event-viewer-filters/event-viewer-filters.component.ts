@@ -7,7 +7,8 @@ import { EventFiltersVm } from '../../../types/viewmodels/EventFiltersVm';
 
 @Component({
     selector: 'event-viewer-filters',
-    templateUrl: 'event-viewer-filters.component.html'
+    templateUrl: 'event-viewer-filters.component.html',
+    styleUrls: ['event-viewer-filters.component.css']
 })
 export class EventViewerFiltersComponent {
     //#region Public Api
@@ -44,7 +45,23 @@ export class EventViewerFiltersComponent {
         this._applyFilters();
     }
 
+    public UiOnSearchMessageClicked(): void {
+        alert(this.filters.searchTerm);
+    }
+
+    public UiOnEventTypeClicked(eventType: EventEntryTypes): void {
+        this.filters.eventEntryTypes.push(eventType);
+    }
+
     //#endregion UI callbacks
+
+
+    //#region UiHelpers
+    public UiEventEntriesToShow(): string[] {
+        return GlobalUtils.enumValuesToArray(EventEntryTypes)
+            .filter(et => this.filters.eventEntryTypes.map(i => i.toString()).indexOf(et) < 0);
+    }
+    //#endregion
 
 
 }

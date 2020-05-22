@@ -10,6 +10,9 @@
         <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
     </div>
 
+    <!-- Filters -->
+    <event-viewer-filters></event-viewer-filters>
+
     <!-- Clear & Refersh Buttons -->
     <div style="margin-left:5px; margin-bottom: 10px;">
         <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
