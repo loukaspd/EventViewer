@@ -8,6 +8,16 @@ export class EventFiltersVm {
     public searchTerm: string = '';
     public sources: string[] = [];
 
+    constructor(instance?: EventFiltersVm) {
+        if (instance != null) {
+            this.eventEntryTypes = [...instance.eventEntryTypes];
+            this.dateFrom = instance.dateFrom;
+            this.dateTo = instance.dateTo;
+            this.searchTerm = instance.searchTerm;
+            this.sources = [...instance.sources];
+        }
+    }
+
 
     //#region Business
     public isEmpty() :boolean {

@@ -11,7 +11,10 @@
     </div>
 
     <!-- Filters -->
-    <event-viewer-filters></event-viewer-filters>
+    <event-viewer-filters
+    [filters]="filters"
+    (onFiltersChanged)="uiOnFiltersChanged($event)"
+    ></event-viewer-filters>
 
     <!-- Clear & Refersh Buttons -->
     <div style="margin-left:5px; margin-bottom: 10px;">

@@ -1,8 +1,32 @@
 <div class="flex-container">
+    <!-- Selected Filters -->
+    <ul class="filters-selected">
+        <li
+        *ngFor="let filter of filters.eventEntryTypes" 
+        class="filters-selected-item">
+            <h5 [ngClass]="filter">{{filter}}</h5>
+            <img 
+            (click)="UiOnRemoveClicked(filter)"
+            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+        </li>
+        
+        <li *ngIf="!!filters.searchTerm"
+        class="filters-selected-item">
+            <h5>{{filters.searchTerm}}</h5>
+            <img 
+            (click)="UiOnRemoveSearchClicked()"
+            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+        </li>
+    </ul>
+
     <!-- Add Filter -->
-    <a nz-dropdown [nzDropdownMenu]="menu" 
+    <button nz-button nz-dropdown [nzDropdownMenu]="menu"
+    nzClickHide="true"
     nzTrigger="click"
-    nzClickHide="false">Filter<i nz-icon nzType="down"></i></a>
+    [(nzVisible)]="dropdownVisible">
+    Filter
+    <i nz-icon nzType="down"></i>
+    </button>
     <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
         <!-- Entry Type-->
@@ -14,7 +38,7 @@
         <li nz-menu-divider></li>
         <!-- Search Input -->
         <nz-input-group [nzAddOnAfter]="suffixButton">
-            <input type="text" nz-input placeholder="Search Message" id="searchInput" [(ngModel)]="filters.searchTerm"/>
+            <input type="text" nz-input placeholder="Search Message" id="searchInput" [(ngModel)]="filterText"/>
             <ng-template #suffixButton>
                 <button (click)="UiOnSearchMessageClicked()" nz-button nzType="primary" nzSearch>Apply</button>
             </ng-template>

@@ -1,5 +1,5 @@
 //#region imports
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { GlobalUtils } from '../../../services/global-utils';
 import { EventEntryTypes } from '../../../types/Constants';
 import { EventFiltersVm } from '../../../types/viewmodels/EventFiltersVm';
@@ -15,42 +15,49 @@ export class EventViewerFiltersComponent {
     @Output()
     onFiltersChanged: EventEmitter<EventFiltersVm> = new EventEmitter<EventFiltersVm>();
     @Input()
-    public sources: string[] = [];
+    public filters: EventFiltersVm;
+
+    public filterText: string = '';
+    public dropdownVisible: boolean = false;
     //#endregion Public Api
     //#region Constructor & Properties
     constructor() { }
     public eventLevels: string[] = GlobalUtils.enumValuesToArray(EventEntryTypes);
-    public filters: EventFiltersVm = new EventFiltersVm();
     //#endregion Constructor & Properties
 
 
     //#region Component Methods
-
+    ngOnChanges(changes: SimpleChanges) {
+        this.filterText = changes.filters.currentValue.searchTerm;
+    }
     //#endregion Component Methods
 
 
     //#region Implementation
-    private _applyFilters():void {
-        this.onFiltersChanged.emit(this.filters);
-    }
     //#endregion Implementation
 
+
     //#region Ui callbacks
-    public UiOnApplyClicked(): void {
-        this._applyFilters();
-    }
-
-    public UiOnClearClicked(): void {
-        this.filters = new EventFiltersVm();
-        this._applyFilters();
-    }
-
     public UiOnSearchMessageClicked(): void {
-        alert(this.filters.searchTerm);
+        this.filters.searchTerm = this.filterText;
+        this.dropdownVisible = false;
+        this.onFiltersChanged.emit(this.filters);
     }
 
     public UiOnEventTypeClicked(eventType: EventEntryTypes): void {
         this.filters.eventEntryTypes.push(eventType);
+        this.onFiltersChanged.emit(this.filters);
+    }
+
+    public UiOnRemoveClicked(filter: string): void {
+        this.filters.eventEntryTypes = this.filters.eventEntryTypes
+        .filter(et => et.toString().indexOf(filter) < 0);
+        this.onFiltersChanged.emit(this.filters);
+    }
+
+    public UiOnRemoveSearchClicked(): void {
+        this.filters.searchTerm = '';
+        this.onFiltersChanged.emit(this.filters);
     }
 
     //#endregion UI callbacks
