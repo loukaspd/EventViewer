@@ -17,8 +17,10 @@ export class EventViewerFiltersComponent {
     @Input()
     public filters: EventFiltersVm;
 
+    public filterDateFrom: Date = null;
+    public filterDateTo: Date = null;
     public filterText: string = '';
-    public dropdownVisible: boolean = false;
+    public filtersVisible: boolean = false;
     //#endregion Public Api
     //#region Constructor & Properties
     constructor() { }
@@ -29,6 +31,8 @@ export class EventViewerFiltersComponent {
     //#region Component Methods
     ngOnChanges(changes: SimpleChanges) {
         this.filterText = changes.filters.currentValue.searchTerm;
+        this.filterDateFrom = changes.filters.currentValue.dateFrom;
+        this.filterDateTo = changes.filters.currentValue.dateTo;
     }
     //#endregion Component Methods
 
@@ -40,7 +44,7 @@ export class EventViewerFiltersComponent {
     //#region Ui callbacks
     public UiOnSearchMessageClicked(): void {
         this.filters.searchTerm = this.filterText;
-        this.dropdownVisible = false;
+        this.filtersVisible = false;
         this.onFiltersChanged.emit(this.filters);
     }
 
@@ -57,6 +61,32 @@ export class EventViewerFiltersComponent {
 
     public UiOnRemoveSearchClicked(): void {
         this.filters.searchTerm = '';
+        this.onFiltersChanged.emit(this.filters);
+    }
+
+    public UiOnRemoveDateFrom(): void {
+        this.filters.dateFrom = null;
+        this.onFiltersChanged.emit(this.filters);
+    }
+
+    public UiOnRemoveDateTo(): void {
+        this.filters.dateTo = null;
+        this.onFiltersChanged.emit(this.filters);
+    }
+
+    public UiOnDateChanged(): void {
+        this.filtersVisible = false;
+        this.filters.dateFrom = this.filterDateFrom;
+        this.filters.dateTo = this.filterDateTo;
+        this.onFiltersChanged.emit(this.filters);
+    }
+
+    //Hide filtes when a date is cleared
+    public UiOnDateMightClear(newDate: Date): void {
+        if (newDate != null) return;
+        this.filtersVisible = false;
+        this.filters.dateFrom = this.filterDateFrom;
+        this.filters.dateTo = this.filterDateTo;
         this.onFiltersChanged.emit(this.filters);
     }
 

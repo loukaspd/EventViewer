@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // antd
 import { NgZorroAntdModule} from 'ng-zorro-antd';
 import { NZ_I18N, en_US } from 'ng-zorro-antd';  //used by datepicker
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DatePipe } from '@angular/common';
 import en from '@angular/common/locales/en';
 registerLocaleData(en);
 //#region Components
@@ -56,6 +56,7 @@ import { SidebarEventsComponent } from './components/sidebar-events/sidebar-even
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }
+    ,DatePipe
   ],
   bootstrap: [AppComponent],
 })

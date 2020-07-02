@@ -10,21 +10,21 @@
         <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
     </div>
 
-    <!-- Filters -->
-    <event-viewer-filters
-    [filters]="filters"
-    (onFiltersChanged)="uiOnFiltersChanged($event)"
-    ></event-viewer-filters>
-
-    <!-- Clear & Refersh Buttons -->
-    <div style="margin-left:5px; margin-bottom: 10px;">
-        <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+    <!-- Filters - Clear & Refersh Buttons -->
+    <div style="margin-bottom: 10px;" class="flex-container">
+        <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle" style="margin-left:5px;">
             <i nz-icon nzType="delete"></i>
         </button>
 
-        <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+        <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle" style="margin-left:5px;">
             <i nz-icon nzType="issues-close"></i>
         </button>
+        
+        <event-viewer-filters
+        [filters]="filters"
+        (onFiltersChanged)="uiOnFiltersChanged($event)"
+        style="margin-left:5px;"
+        ></event-viewer-filters>
     </div>
 
     <!-- Main List-->

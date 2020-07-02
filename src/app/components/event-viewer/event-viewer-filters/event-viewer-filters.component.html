@@ -17,13 +17,29 @@
             (click)="UiOnRemoveSearchClicked()"
             src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
         </li>
+        
+        <li *ngIf="!!filters.dateFrom"
+        class="filters-selected-item">
+            <h5>{{filters.dateFrom | date:'yyyy-MM-dd HH:mm'}}</h5>
+            <img 
+            (click)="UiOnRemoveDateFrom()"
+            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+        </li>
+        
+        <li *ngIf="!!filters.dateTo"
+        class="filters-selected-item">
+            <h5>{{filters.dateTo | date:'yyyy-MM-dd HH:mm'}}</h5>
+            <img 
+            (click)="UiOnRemoveDateTo()"
+            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+        </li>
     </ul>
 
     <!-- Add Filter -->
     <button nz-button nz-dropdown [nzDropdownMenu]="menu"
     nzClickHide="true"
     nzTrigger="click"
-    [(nzVisible)]="dropdownVisible">
+    [(nzVisible)]="filtersVisible">
     Filter
     <i nz-icon nzType="down"></i>
     </button>
@@ -42,6 +58,27 @@
             <ng-template #suffixButton>
                 <button (click)="UiOnSearchMessageClicked()" nz-button nzType="primary" nzSearch>Apply</button>
             </ng-template>
+        </nz-input-group>
+        <!-- Dates -->
+        <nz-input-group>
+            <nz-date-picker
+            nzShowTime
+            nzFormat="yyyy-MM-dd HH:mm"
+            [(ngModel)]="filterDateFrom"
+            nzPlaceHolder="Date From"
+            (nzOnOk)="UiOnDateChanged()"
+            (ngModelChange)="UiOnDateMightClear($event)"
+            ></nz-date-picker>
+        </nz-input-group>
+        <nz-input-group>
+            <nz-date-picker
+            nzShowTime
+            nzFormat="yyyy-MM-dd HH:mm"
+            [(ngModel)]="filterDateTo"
+            nzPlaceHolder="Date To"
+            (nzOnOk)="UiOnDateChanged()"
+            (ngModelChange)="UiOnDateMightClear($event)"
+            ></nz-date-picker>
         </nz-input-group>
     </ul>
     </nz-dropdown-menu>
