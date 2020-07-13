@@ -7,7 +7,8 @@ import { LogSelectionComponent } from './log-selection/log-selection.component';
 
 @Component({
   selector: 'main-component',
-  templateUrl: 'main.component.html'
+  templateUrl: 'main.component.html',
+  styleUrls: ['main.component.css']
 })
 export class MainComponent implements OnInit{
   //#region Constructor & Properties
@@ -15,7 +16,7 @@ export class MainComponent implements OnInit{
   public activeIndex: number = 0;
   public tabs: EventLog[] = [];
   public tabsShowOnlyNewEvents: boolean[] = [];
-  public tabsWithNewContent: boolean[] = [];
+  public tabsWithNewContent: Number[] = [];
   //#endregion Constructor & Properties
 
 
@@ -47,11 +48,13 @@ export class MainComponent implements OnInit{
     this.tabsShowOnlyNewEvents.splice(index,1);
     this.tabsWithNewContent.splice(index,1);
 
-    if (this.tabs.length == 0) this._showSelectionDialog();
+    if (--this.activeIndex < 0) this.activeIndex = Math.max(this.tabs.length -1, 0);
+
+    if (this.tabs.length == 0) this._showSelectionDialog(); 
   }
 
   public onEventLogSelected(param: {eventLog: EventLog, showOnlyNew:boolean}) {
-    if (!param.eventLog) return;
+    if (!param || !param.eventLog) return;
     const index = this.tabs.findIndex(t => t.IsSame(param.eventLog));
     if (index >=0) {
       this.activeIndex = index;
@@ -59,7 +62,7 @@ export class MainComponent implements OnInit{
     }
     this.tabs.push(param.eventLog);
     this.tabsShowOnlyNewEvents.push(param.showOnlyNew);
-    this.tabsWithNewContent.push(false);
+    this.tabsWithNewContent.push(0);
     this.activeIndex = this.tabs.length-1;
   }
   //#endregion Ui Callbacks

@@ -1,31 +1,34 @@
-<nz-layout>
-    <nz-sider>
-        <event-viewer-filters
-        (onFiltersChanged)="uiOnFiltersChanged($event)"
-        [sources]="sources"
-        ></event-viewer-filters>
-    </nz-sider>
-    
-    
-    <nz-content>
-    <!-- Number of logs indicator -->
+<div class="container">
+
+    <!-- Title -->
+    <div class="title event-viewer-title">
+        <span># {{eventLog.UiTabLabel()}}</span>
+    </div>
+
+    <!-- Number of Events-->
     <div *ngIf="!viewModel.loading && viewModel.countAll > 0">
         <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
     </div>
 
-    <!-- Clear & Refersh Buttons -->
-    <div style="margin-left:5px; margin-bottom: 10px;">
-        <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+    <!-- Filters - Clear & Refersh Buttons -->
+    <div style="margin-bottom: 10px;" class="flex-container">
+        <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle" style="margin-left:5px;">
             <i nz-icon nzType="delete"></i>
         </button>
 
-        <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+        <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle" style="margin-left:5px;">
             <i nz-icon nzType="issues-close"></i>
         </button>
+        
+        <event-viewer-filters
+        [filters]="filters"
+        (onFiltersChanged)="uiOnFiltersChanged($event)"
+        style="margin-left:5px;"
+        ></event-viewer-filters>
     </div>
-    
+
     <!-- Main List-->
-    <event-entry-item  
+    <event-entry-item
     *ngFor="let event of viewModel.events"
     [event]="event">
     </event-entry-item>
@@ -34,15 +37,14 @@
     <div class="loadmore">
         <button nz-button *ngIf="!viewModel.loading && viewModel.hasMore" (click)="uiOnMoreClicked()">load more</button>
     </div>
-    
+
     <!-- Loaders & NoResults -->
     <nz-spin class="loader" *ngIf="viewModel.loading" nzTip="Loading..." nzSimple [nzSize]="'large'"></nz-spin>
-    
+
     <nz-empty *ngIf="!viewModel.loading && viewModel.events.length == 0"
         [nzNotFoundContent]="emptyContent">
         <ng-template #emptyContent>
             <span>No Events</span>
         </ng-template>
     </nz-empty>
-    </nz-content>
-</nz-layout>
+</div>

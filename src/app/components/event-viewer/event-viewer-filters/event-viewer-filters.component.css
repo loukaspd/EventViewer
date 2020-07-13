@@ -1,0 +1,47 @@
+.filters-selected {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filters-selected-item {
+    padding: .25rem .5rem;
+    background-color: #f3f4ee;
+    display: flex;
+    align-items: center;
+    border-radius: .25rem;
+    margin: .25rem;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+.filters-selected img {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.filters-selected h5 {
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    height: 1rem;
+    line-height: .875rem;
+}
+
+
+.Information {
+    color: #486274;
+}
+
+.Warning {
+    color: #ffae42;
+    /* color: #646464; */
+}
+
+.Error {
+    color: #FF9494;
+}

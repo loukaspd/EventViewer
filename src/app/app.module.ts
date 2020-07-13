@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // antd
 import { NgZorroAntdModule} from 'ng-zorro-antd';
 import { NZ_I18N, en_US } from 'ng-zorro-antd';  //used by datepicker
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DatePipe } from '@angular/common';
 import en from '@angular/common/locales/en';
 registerLocaleData(en);
 //#region Components
@@ -20,6 +20,7 @@ import { EventViewerFiltersComponent } from './components/event-viewer/event-vie
 import { LogSelectionComponent } from './components/log-selection/log-selection.component';
 import { EventIconComponent } from './components/shared/event-icon/event-icon.component';
 import { EventEntryItemComponent } from './components/event-viewer/event-entry-item/event-entry-item.component';
+import { SidebarEventsComponent } from './components/sidebar-events/sidebar-events.component';
 //#endregion Components
 //#endregion Imports
 
@@ -28,6 +29,8 @@ import { EventEntryItemComponent } from './components/event-viewer/event-entry-i
     AppComponent
     ,MainComponent
     ,LogSelectionComponent
+
+    ,SidebarEventsComponent
     ,EventViewerComponent
     ,EventViewerFiltersComponent
     
@@ -53,6 +56,7 @@ import { EventEntryItemComponent } from './components/event-viewer/event-entry-i
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }
+    ,DatePipe
   ],
   bootstrap: [AppComponent],
 })

@@ -15,6 +15,7 @@ import { PowershellMonitor } from '../../services/powershell/powershell-monitor'
 @Component({
     selector: 'event-viewer',
     templateUrl: 'event-viewer.component.html'
+    ,styleUrls: ['event-viewer.component.css']
     ,changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventViewerComponent implements OnInit, OnDestroy {
@@ -27,7 +28,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     @Input()
     public showOnlyNewEvents: boolean;
     @Output()
-    public unreadEventsUpdated = new EventEmitter<boolean>();
+    public unreadEventsUpdated = new EventEmitter<number>();
 
     public viewModel= new ViewModel();
     public filters= new EventFiltersVm();
@@ -35,7 +36,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
     private _monitor: PowershellMonitor;
     private _allEvents: Event[] = [];   //all events of the log
-    private _events: Event[] =[];       //after filter & paging
+    private _events: Event[] =[];       //after filter
     private _onNewSubscription: Subscription;
     //#endregion Constructor & Properties
 
@@ -81,7 +82,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         : this._allEvents.filter(e => this.filters.eventPassesFilters(e));
         // initialize ui variables
         this.viewModel = new ViewModel();
-        this.unreadEventsUpdated.emit(false);
+        this.unreadEventsUpdated.emit(0);
         this.viewModel.countAll = this._allEvents.length;
         this.viewModel.countFiltered = this._events.length;
         // get data
@@ -101,7 +102,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         if (!newEventsWithFilters) return;
         //notify ui
         this.viewModel.hasNew = true;
-        this.unreadEventsUpdated.emit(true);
+        this.unreadEventsUpdated.emit(this._allEvents.length - this._events.length);
         this.changeDetRef.markForCheck();
     }
 
@@ -146,7 +147,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     }
 
     public uiOnFiltersChanged(filters: EventFiltersVm): void {
-        this.filters = filters;
+        this.filters = new EventFiltersVm(filters);
         this._refreshList();
     }
     //#endregion UiCallbacks

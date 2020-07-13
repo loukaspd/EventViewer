@@ -1,0 +1,101 @@
+#events-list-container {
+    margin-top: 18px;
+}
+
+
+/* title */
+.title-container {
+    display: flex;
+    align-items: center;
+}
+
+.title-container span {
+    color: #ab9ba9;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+}
+
+#add-btn {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* list */
+#event-logs-ul {
+    list-style-type: none;
+    padding: 0;
+    /* color: #ab9ba9; */
+}
+
+#event-logs-ul li {
+    padding-left: 10px;
+    height: 26px;
+    line-height: 26px;
+    padding-right: 10px;
+    color: #FFFFFF;
+
+    cursor: pointer;
+}
+
+#event-logs-ul li.active {
+    background-color: rgb(76, 150, 137);
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+#event-logs-ul li:hover {
+    background-color: rgb(62, 49, 60);
+}
+
+#event-logs-ul .flex-container {
+    align-items: center;
+}
+
+
+/* Name */
+.sidebar-name {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* list unread indicator */
+.sidebar-unread-badge {
+    margin-left: auto;
+    /* this will center the text */
+    display: inline-flex;
+    align-items: center;
+    /* dimensions */
+    height: 18px;
+    padding-left:9px;
+    padding-right:9px;
+    /* red circle outline */
+    background-color: rgb(235, 77, 92);
+    border-radius: 16px;
+    /* text style */
+    font-size:12px;
+    font-weight:700;
+    
+}
+
+#event-logs-ul li:hover .sidebar-unread-badge {
+    display: none;
+}
+
+/* list close icon */
+#event-logs-ul .sidebar-close-icon {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+#event-logs-ul li:hover .sidebar-close-icon {
+    display: block;
+}
