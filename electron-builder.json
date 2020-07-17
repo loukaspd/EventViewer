@@ -1,4 +1,5 @@
 {
+  "appId": "gr.loukaspd.eventviewer",
   "productName": "EventViewer++",
   "directories": {
     "output": "release/"

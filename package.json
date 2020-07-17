@@ -80,6 +80,7 @@
     "node": ">=10.9.0"
   },
   "dependencies": {
+    "electron-log": "^4.2.2",
     "electron-updater": "^4.1.2",
     "ng-zorro-antd": "^8.3.1",
     "node-powershell": "^4.0.0"
