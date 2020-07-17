@@ -24,4 +24,4 @@ jobs:
     - name: release to github
       run: npm run release:windows
       env:
-        GH_TOKEN: ${{ secrets.Github_AccessToken }}
+        GH_TOKEN: ${{ secrets.GH_AT }}
