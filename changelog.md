@@ -4,6 +4,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.1.1] 2020/07/17
+
+### Added
+- **[log-selection]:** adds remove eventLog functionality
+
+### Changed
+
+### Fixed
+
+
 ## [0.1.0] 2020/07/17
 New slack-like ui
 
