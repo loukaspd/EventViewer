@@ -12,6 +12,14 @@ export class PowershellCommands {
         return PsCommandExecutor.executeCommand(command, false);
     }
 
+
+    static removeEventLog(eventLog: EventLog): Promise<string> {
+        let command = `Remove-EventLog -LogName "${eventLog.log}"`;
+        if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
+        
+        return PsCommandExecutor.executeCommand(command, false);
+    }
+
     //#region Event Log Sources
     public static eventLogSources(eventLog: EventLog): Promise<string[]> {
         let command = `Get-EventLog -LogName "${eventLog.log}"`;

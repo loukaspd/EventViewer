@@ -5,6 +5,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { Subscription, fromEvent } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
 import { PowershellCommands } from '../../services/powershell/powershell-commands';
+import { GlobalUtils } from '../../services/global-utils';
 //#endregion imports
 
 @Component({
@@ -82,6 +83,23 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
         this.logers = this._logers.filter(l => !this._searchValue || l.log.toLowerCase().indexOf(this._searchValue) >=0);
     }
 
+
+    private _removeEventLog(item: EventLog) {
+        this.loading = true;
+        PowershellCommands.removeEventLog(item)
+        .then(() => {
+            this._search();
+        })
+        .catch(ex => {
+            console.log(ex);
+            this.modalService.error({
+                nzTitle: 'Something went wrong'
+                ,nzContent: 'please try again'
+            });
+        })
+        .finally(() => this.loading = false);
+    }
+
     //#endregion Implementation
 
 
@@ -99,6 +117,27 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
 
     public UiOnSearchClicked(): void {
         this._search();
+    }
+
+    public UiOnRemoveItemClicked(item: EventLog): void {
+        GlobalUtils.runningAsAdmin()
+        .then((res:boolean) => {
+            if (!res) {
+                this.modalService.error({
+                    nzTitle: 'Error'
+                    ,nzContent: 'Run the app as admin to execute this action'
+                  });
+                return;
+            }
+
+            this.modalService.confirm({
+                nzTitle: `Remove EventLog ${item.log} ?`
+                ,nzCancelText: 'Cancel'
+                ,nzOkText: 'Yes'
+                ,nzOkType: 'danger'
+                ,nzOnOk: () => this._removeEventLog(item)
+            });
+        });
     }
     //#endregion UiCallbacks
 

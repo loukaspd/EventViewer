@@ -23,7 +23,8 @@
     [nzLoading]="loading"
 >
     <ng-template #itemRef let-item>
-        <li nz-list-item [nzActions]="[opAction]" [nzContent]="item.log + ' ('+ item.entries +')'" nzNoFlex></li>
-        <ng-template #opAction><a (click)="UiOnItemSelected(item)">select</a></ng-template>
+        <li nz-list-item [nzActions]="[deleteAction, selectAction]" [nzContent]="item.log + ' ('+ item.entries +')'" nzNoFlex></li>
+        <ng-template #deleteAction><a (click)="UiOnRemoveItemClicked(item)" style="color: #E89999;">remove</a></ng-template>
+        <ng-template #selectAction><a (click)="UiOnItemSelected(item)">select</a></ng-template>
     </ng-template>
 </nz-list>
