@@ -5,7 +5,14 @@ import { PsCommandExecutor } from "./powershell-command-executor";
 
 export class PowershellCommands {
 
-    static clearEventLog(eventLog: EventLog): Promise<string> {
+    public static newEventLog(logName: string, source: string, computerName: string): Promise<string> {
+        let command = `New-EventLog -LogName "${logName}" -Source "${source}"`;
+        if (!!computerName) command += ` -ComputerName "${computerName}"`;
+
+        return PsCommandExecutor.executeCommand(command, false);
+    }
+
+    public static clearEventLog(eventLog: EventLog): Promise<string> {
         let command = `Clear-EventLog -LogName "${eventLog.log}"`;
         if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         
@@ -13,7 +20,7 @@ export class PowershellCommands {
     }
 
 
-    static removeEventLog(eventLog: EventLog): Promise<string> {
+    public static removeEventLog(eventLog: EventLog): Promise<string> {
         let command = `Remove-EventLog -LogName "${eventLog.log}"`;
         if (eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
         

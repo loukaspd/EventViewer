@@ -1,0 +1,13 @@
+<nz-tabset
+[nzAnimated]="false">
+    <nz-tab nzTitle="Select EventLog">
+        <log-selection
+        (onLogSelected)="UiOnLogSelected($event)"
+        ></log-selection>
+    </nz-tab>
+    <nz-tab nzTitle="Add New">
+        <log-creation
+        (onEventSourceAdded)="UiOnEventLogAdded()"
+        ></log-creation>
+    </nz-tab>
+</nz-tabset>

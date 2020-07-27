@@ -17,7 +17,9 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './components/main.component'
 import { EventViewerComponent } from './components/event-viewer/event-viewer.component';
 import { EventViewerFiltersComponent } from './components/event-viewer/event-viewer-filters/event-viewer-filters.component';
-import { LogSelectionComponent } from './components/log-selection/log-selection.component';
+import { EventLogsManagementComponent } from './components/event-logs-management-dialog/event-logs-management.component'
+import { LogSelectionComponent } from './components/event-logs-management-dialog/log-selection/log-selection.component';
+import { LogCreationComponent } from './components/event-logs-management-dialog/log-creation/log-creation.component';
 import { EventIconComponent } from './components/shared/event-icon/event-icon.component';
 import { EventEntryItemComponent } from './components/event-viewer/event-entry-item/event-entry-item.component';
 import { SidebarEventsComponent } from './components/sidebar-events/sidebar-events.component';
@@ -29,16 +31,18 @@ import { SidebarEventsComponent } from './components/sidebar-events/sidebar-even
     AppComponent
     ,MainComponent
     ,LogSelectionComponent
+    ,LogCreationComponent
 
     ,SidebarEventsComponent
     ,EventViewerComponent
     ,EventViewerFiltersComponent
+    ,EventLogsManagementComponent
     
     ,EventIconComponent
     ,EventEntryItemComponent
   ],
   entryComponents: [
-    LogSelectionComponent //used inside dialog
+    EventLogsManagementComponent //used inside dialog
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,12 @@
 //#region imports
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EventLog } from '../../types/EventLog';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { EventLog } from '../../../types/EventLog';
+import { NzModalService } from 'ng-zorro-antd';
 import { Subscription, fromEvent } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
-import { PowershellCommands } from '../../services/powershell/powershell-commands';
-import { GlobalUtils } from '../../services/global-utils';
+import { PowershellCommands } from '../../../services/powershell/powershell-commands';
+import { GlobalUtils } from '../../../services/global-utils';
+import { AppLogger } from '../../../services/AppLogger';
 //#endregion imports
 
 @Component({
@@ -14,10 +15,19 @@ import { GlobalUtils } from '../../services/global-utils';
 })
 export class LogSelectionComponent implements OnInit, OnDestroy {
     
-    //#region Constructor & Properties
-    constructor(private modalService: NzModalService
-        , private modal: NzModalRef) { }
+    //#region Constructor Input - Outputs
+    @Output()
+    public onLogSelected = new EventEmitter<any>();
+    
+    constructor(private modalService: NzModalService) { }
 
+    public refreshLogs(): void {
+        this._search();
+    }
+    //#endregion Constructor Input - Outputs
+
+
+    //#region Component Variables
     private _searchInputSub: Subscription;
 
     public loading: boolean= true;
@@ -25,7 +35,7 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
     public logers: EventLog[] = [];
     private _searchValue: string = '';
     public remoteComputer: string = '';
-    //#endregion Constructor & Properties
+    //#endregion Component Variables
 
 
     //#region Component Methods
@@ -90,8 +100,8 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
         .then(() => {
             this._search();
         })
-        .catch(ex => {
-            console.log(ex);
+        .catch(e => {
+            AppLogger.getInstance().logError(e);
             this.modalService.error({
                 nzTitle: 'Something went wrong'
                 ,nzContent: 'please try again'
@@ -109,9 +119,9 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
             nzTitle: 'Which events to show?',
             nzContent: '',
             nzOkText: 'All events',
-            nzOnOk: () => this.modal.close({eventLog: item, showOnlyNew:false}),
+            nzOnOk: () =>  this.onLogSelected.emit({eventLog: item, showOnlyNew:false}),
             nzCancelText: 'New Only',
-            nzOnCancel: () => this.modal.close({eventLog: item, showOnlyNew:true})
+            nzOnCancel: () => this.onLogSelected.emit({eventLog: item, showOnlyNew:true})
           });
     }
 

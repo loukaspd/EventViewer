@@ -2,7 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EventLog } from '../types/EventLog';
 import { NzModalService } from 'ng-zorro-antd';
-import { LogSelectionComponent } from './log-selection/log-selection.component';
+import { EventLogsManagementComponent } from './event-logs-management-dialog/event-logs-management.component';
+
 //#endregion imports
 
 @Component({
@@ -30,7 +31,7 @@ export class MainComponent implements OnInit{
   //#region Implementation
   private _showSelectionDialog() {
     const modal = this.modalService.create({
-      nzContent: LogSelectionComponent
+      nzContent: EventLogsManagementComponent
       ,nzClosable: false
       ,nzFooter: null
     });

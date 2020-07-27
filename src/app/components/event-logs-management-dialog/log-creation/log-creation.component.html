@@ -1,0 +1,25 @@
+<form nz-form>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="4" nzFor="logName">LogName</nz-form-label>
+      <nz-form-control [nzSpan]="8">
+        <input [(ngModel)]="UiVm.logName" type="text" nz-input placeholder="LogName" name="logName"/>
+      </nz-form-control>
+    </nz-form-item>
+
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="4" nzFor="source">Source</nz-form-label>
+      <nz-form-control [nzSpan]="8">
+        <input [(ngModel)]="UiVm.source" type="text" nz-input placeholder="Source" name="source" />
+      </nz-form-control>
+    </nz-form-item>
+    
+    
+    
+    <nz-form-item>
+      <nz-form-control [nzSpan]="8" [nzOffset]="4">
+        <button (click)="UiOnAddClicked()" nz-button nzType="primary">Add</button>
+      </nz-form-control>
+    </nz-form-item>
+</form>

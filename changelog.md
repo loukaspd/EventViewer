@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.1.2] 2020/07/28
+
+### Added
+- **[log-creation]:** adds EventLog and EventSource creation functionality inside log-selection modal
+
+### Changed
+
+### Fixed
+
+
 
 ## [0.1.1] 2020/07/17
 
