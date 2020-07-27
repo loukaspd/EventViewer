@@ -30,7 +30,6 @@ export class PsCommandExecutor {
      */
     public static executeCommand(command: string, ignoreError?:boolean, timeout?:number): Promise<string> {
         
-        //commands.length > 1 ? console.table(commands) : console.log(commands.last());    //TODO REMOVE
         const _ps = this._initShell();
         const commandPromise: Promise<string> = _ps.addCommand('[Console]::OutputEncoding = [System.Text.Encoding]::UTF8')
         .then(() => _ps.addCommand(command))

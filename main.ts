@@ -2,13 +2,13 @@ import { app, BrowserWindow, screen } from 'electron';
 import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
+const electronLog = require('electron-log');
 
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
 function createWindow() {
-
   //const electronScreen = screen;
   //const size = electronScreen.getPrimaryDisplay().workAreaSize;
   const size = {height: 768,width: 1024};
@@ -64,6 +64,7 @@ try {
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
     createWindow();
+    electronLog.info("app started!!!");
     //setupAutoUpdaterLogging();
     autoUpdater.checkForUpdatesAndNotify();
   });
@@ -93,8 +94,7 @@ try {
 //#region autoUpdater
 function setupAutoUpdaterLogging() {
   //%USERPROFILE%\AppData\Roaming\event-viewer-pp\logs\main.log
-  const log = require("electron-log");
-  log.transports.file.level = "debug";
-  autoUpdater.logger = log;
+  electronLog.transports.file.level = "debug";
+  autoUpdater.logger = electronLog;
 }
 //#endregion

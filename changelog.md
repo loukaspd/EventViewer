@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - **[log-creation]:** adds EventLog and EventSource creation functionality inside log-selection modal
+- **[Packages]:** adds AppLogger using electron-log package
 
 ### Changed
 

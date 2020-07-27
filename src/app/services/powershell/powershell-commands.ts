@@ -2,6 +2,7 @@ import { Event } from "../../types/Event";
 import { EventLog } from "../../types/EventLog";
 import { GlobalUtils } from "../global-utils";
 import { PsCommandExecutor } from "./powershell-command-executor";
+import { AppLogger } from "../AppLogger";
 
 export class PowershellCommands {
 
@@ -49,6 +50,7 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
+        AppLogger.getInstance().logDebug(command);
         return PsCommandExecutor.executeCommand(command, false, 90)
         .then(output => PowershellCommands._parseEventViewersList(output))
         .then(events => {
@@ -58,6 +60,7 @@ export class PowershellCommands {
     }
     
     private static _parseEventViewersList(output: string): EventLog[] {
+        AppLogger.getInstance().logDebug(output);
         const regex = /\S*\s+\d+\s+\D+\s+([\d|,]+)\s+(.*)/s;
 
         return GlobalUtils.splitLines(output)   //get each line

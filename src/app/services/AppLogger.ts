@@ -1,5 +1,12 @@
-import * as fs from 'fs';
-import * as path from 'path';
+// const log = require('electron-log');
+import log from 'electron-log';
+log.transports.file.fileName = 'main.log';
+
+const debugLog = log.create('debugLog');
+debugLog.transports.file.level = 'debug';
+debugLog.transports.file.fileName = 'debug.log';
+
+// const log = require("electron-log");
 
 export class AppLogger {
     //#region Instance
@@ -15,22 +22,31 @@ export class AppLogger {
 
 
     //#region Properties & Constructor
-    private _logsPath :string;
     private constructor() {
-        this._logsPath = path.join(process.env.APPDATA, "event-viewer-pp", "logs.txt");
-        fs.writeFileSync(this._logsPath, '');
     }
     //#endregion Properties & Constructor
 
 
     //#region Public Api
-    public log(message:string): void {
-        console.log(message);
-        this.logToFile(message);
+    public logInfo(message: string) {
+        log.info(message);
     }
 
-    public logToFile(message: string): void {
-        fs.appendFileSync(this._logsPath,`-----\n${new Date().toString()}\n${message}`);
+    public logErrorMessage(message: string) {
+        log.error(message);
     }
+
+    public logError(e: Error) {
+        log.error(e);
+    }
+
+    public logWarn(message: string) {
+        log.warn(message);
+    }
+
+    public logDebug(message: string) {
+        debugLog.debug(message);
+    }
+
     //#endregion Public Api
 }
