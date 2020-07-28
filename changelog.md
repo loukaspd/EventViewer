@@ -3,6 +3,19 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [0.1.3] Pending
+
+### Added
+
+### Changed
+- **[AppLogger]:**: introduce debug instance
+
+### Fixed
+- **[log-selection]:** event-logs command parsing when thousands separator is '.' instead of ','
+
+
+
 ## [0.1.2] 2020/07/28
 
 ### Added
