@@ -60,22 +60,27 @@ export class PowershellCommands {
     }
     
     private static _parseEventViewersList(output: string): EventLog[] {
-        AppLogger.getDebug().logDebug(output);
         const regex = /\S*\s+\d+\s+\D+\s+([\d|,|.]+)\s+(.*)/s;
 
         return GlobalUtils.splitLines(output)   //get each line
         .slice(3)                       //remove titles
         .map(line => line.trim())       //trim lines
-        .filter(line => regex.test(line))
         .map(line => {
-            const eventLog = new EventLog();
-            
             let match = regex.exec(line);
+            if (!match || match.length < 3) {
+                if (!!line) {
+                    AppLogger.getDebug().logErrorMessage(`_parseEventViewersList failed for line:\n${line}`);
+                }
+                return null;
+            }
+
+            const eventLog = new EventLog();
             eventLog.log = match[2];
             eventLog.entries = Number(match[1].replace(',','').replace('.',''));
             
             return eventLog;
-        });
+        })
+        .filter(eventLog => eventLog != null);
     }
 
     //#endregion
