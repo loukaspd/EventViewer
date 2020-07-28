@@ -130,13 +130,9 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
     }
 
     public UiOnRemoveItemClicked(item: EventLog): void {
-        GlobalUtils.runningAsAdmin()
+        GlobalUtils.runningAsAdmin(this.modalService)
         .then((res:boolean) => {
             if (!res) {
-                this.modalService.error({
-                    nzTitle: 'Error'
-                    ,nzContent: 'Run the app as admin to execute this action'
-                  });
                 return;
             }
 

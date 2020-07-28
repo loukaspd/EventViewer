@@ -67,13 +67,9 @@ export class LogCreationComponent {
 
     //#region Ui Events
     public UiOnAddClicked(): void {
-        GlobalUtils.runningAsAdmin()
+        GlobalUtils.runningAsAdmin(this.modalService)
         .then((res:boolean) => {
             if (!res) {
-                this.modalService.error({
-                    nzTitle: 'Error'
-                    ,nzContent: 'Run the app as admin to execute this action'
-                  });
                 return;
             }
 

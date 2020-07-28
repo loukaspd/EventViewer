@@ -1,4 +1,5 @@
 import {exec} from 'child_process';
+import { NzModalService } from 'ng-zorro-antd';
 
 export class GlobalUtils {
     public static enumValuesToArray(a: any): string[] {
@@ -16,10 +17,19 @@ export class GlobalUtils {
         return input.split(/\r?\n/);
     }
 
-    public static runningAsAdmin(): Promise<boolean> {
+    public static runningAsAdmin(modalService: NzModalService): Promise<boolean> {
         return new Promise((res,rej) => {
             exec('NET SESSION', (err, so, se) => res(se != undefined && se.length == 0));
         })
+        .then((res:boolean) => {
+            if (!!modalService && !res) {
+                modalService.error({
+                    nzTitle: 'Error'
+                    ,nzContent: 'Run the app as admin to execute this action'
+                });
+            }
+            return res;
+        });
     }
 }
 
