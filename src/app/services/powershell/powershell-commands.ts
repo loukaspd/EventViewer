@@ -61,7 +61,7 @@ export class PowershellCommands {
     
     private static _parseEventViewersList(output: string): EventLog[] {
         AppLogger.getInstance().logDebug(output);
-        const regex = /\S*\s+\d+\s+\D+\s+([\d|,]+)\s+(.*)/s;
+        const regex = /\S*\s+\d+\s+\D+\s+([\d|,|.]+)\s+(.*)/s;
 
         return GlobalUtils.splitLines(output)   //get each line
         .slice(3)                       //remove titles
