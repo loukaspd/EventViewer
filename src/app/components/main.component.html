@@ -1,4 +1,5 @@
 <div class="main-container">
+  <!-- Sidebar -->
   <div id="sidebar">
     <!-- Title -->
     <div class="title">
@@ -18,8 +19,9 @@
   
   
   <!-- Events List-->
-  <div style="height:100%">
-    <event-viewer
+  <event-viewer
+    style="flex-grow: 1;"
+
     *ngFor="let tab of tabs; let i = index"
     [hidden]="activeIndex != i"
     
@@ -28,8 +30,7 @@
     (unreadEventsUpdated)="tabsWithNewContent[i]=$event"
     >
   
-    </event-viewer>
-  </div>
+  </event-viewer>
   
 
 </div>

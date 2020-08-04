@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="height: 100%; overflow-y: auto;">
 
     <!-- Title -->
     <div class="title event-viewer-title">
@@ -28,14 +28,16 @@
     </div>
 
     <!-- Main List-->
-    <event-entry-item
-    *ngFor="let event of viewModel.events"
-    [event]="event">
-    </event-entry-item>
+    <div>
+        <event-entry-item
+        *ngFor="let event of viewModel.events"
+        [event]="event">
+        </event-entry-item>
 
-    <!-- Load More -->
-    <div class="loadmore">
-        <button nz-button *ngIf="!viewModel.loading && viewModel.hasMore" (click)="uiOnMoreClicked()">load more</button>
+        <!-- Load More -->
+        <div class="loadmore" *ngIf="!viewModel.loading && viewModel.hasMore">
+            <button nz-button (click)="uiOnMoreClicked()">load more</button>
+        </div>
     </div>
 
     <!-- Loaders & NoResults -->
