@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.3] Pending
 
 ### Added
+- **[event-viewer] [ui]:**: scroll to top functionality
 
 ### Changed
 - **[AppLogger]:**: introduce debug instance
@@ -14,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - **[log-selection]:** event-logs command parsing when thousands separator is '.' instead of ','
 - **[event-viewer]:**: fixes getEvents command to work on all windows languages
+- **[event-viewer] [ui]:**: optimize vertical scroll
 
 
 

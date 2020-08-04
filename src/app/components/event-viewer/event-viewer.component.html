@@ -1,4 +1,4 @@
-<div class="container" style="height: 100%; overflow-y: auto;">
+<div #scrollTarget class="container" style="height: 100%; overflow-y: auto;">
 
     <!-- Title -->
     <div class="title event-viewer-title">
@@ -49,4 +49,8 @@
             <span>No Events</span>
         </ng-template>
     </nz-empty>
+
+
+    <!-- Botom-Right ScrollTop functionality -->
+    <nz-back-top [nzTarget]="scrollTarget"></nz-back-top>
 </div>
