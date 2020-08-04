@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - **[log-selection]:** event-logs command parsing when thousands separator is '.' instead of ','
+- **[event-viewer]:**: fixes getEvents command to work on all windows languages
 
 
 

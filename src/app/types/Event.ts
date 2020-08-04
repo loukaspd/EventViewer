@@ -5,7 +5,7 @@ export class Event {
     
     public Source: string;
     public TimeGenerated: Date;
-    public originalTimeString: string;
+    public timeGenerated: string;
 
     // public Username: string;
     // public InstanceId: number;
@@ -14,8 +14,6 @@ export class Event {
 
 
     public parseDates() {
-        if (typeof(this.TimeGenerated) == 'string') {
-            this.TimeGenerated = new Date(this.TimeGenerated);
-        }
+        this.TimeGenerated = new Date(this.timeGenerated);
     }
 }

@@ -91,7 +91,7 @@ export class PowershellCommands {
         //build command
         let command = `Get-EventLog -LogName "${eventLog.log}"`;
         if (!!eventLog.computerName) command += ` -ComputerName "${eventLog.computerName}"`;
-        if (!!lastEvent) command += ` -After "${lastEvent.originalTimeString}"`;
+        if (!!lastEvent) command += ` -After "${lastEvent.timeGenerated}"`;
         else if (onlyLastEvent) command += " -Newest 1";
         //add select part
         command += PowershellCommands._selectEventCommand;
@@ -100,7 +100,7 @@ export class PowershellCommands {
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
-    private static _selectEventCommand: string = ` | select-object Index,EntryType,Source,@{n='TimeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},@{n='originalTimeString';e={($_.timegenerated)}},Message`;
+    private static _selectEventCommand: string = ` | select-object Index,EntryType,Source,@{n='timeGenerated';e={Get-Date ($_.timegenerated) -Format 'yyyy-MM-ddTHH:mm:ss'}},Message`;
 
 
     private static _parseEventsCommandOutput(output: string): Event[] {
