@@ -4,7 +4,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.1.3] Pending
+## [0.2.0] Pending
 
 ### Added
 - **[event-viewer] [ui]:**: scroll to top functionality
