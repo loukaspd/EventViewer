@@ -26,11 +26,7 @@
     border-radius: 50%;
 }
 
-/* Expand-collapse toggle*/
-.event-entry-bubble .togle-container {
-    justify-content: flex-end;
-}
-
+/* Expand-Collapse toggles*/
 .event-entry-bubble .toggle {
     font-size: 11px;
     cursor: pointer;

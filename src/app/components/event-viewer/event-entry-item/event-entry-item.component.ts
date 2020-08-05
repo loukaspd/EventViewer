@@ -25,8 +25,8 @@ export class EventEntryItemComponent {
     //#endregion Constructor & Properties
 
     //#region Ui Methods
-    public uiOnToggleClicked() :void {
-        this.uiShowingAllContent = !this.uiShowingAllContent;
+    public uiOnToggleClicked(expand: boolean) :void {
+        this.uiShowingAllContent = expand;
         this.uiEventMessage = this.uiShowingAllContent 
             ? this._event.Message
             : this._messageSmallPart();

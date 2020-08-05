@@ -1,15 +1,20 @@
 <div class="event-entry-container">
     <!-- Bubble Content -->
     <div class="event-entry-bubble">
+        <!-- collapse button -->
+        <div *ngIf="uiHasBigContent && uiShowingAllContent" class="flex-container" style="justify-content: flex-end;">
+            <span class="toggle" (click)="uiOnToggleClicked(false)">collapse</span>
+        </div>
+
         <!-- Indicator & Message -->
         <div class="flex-container">
             <div class="event-type-indicator" [ngClass]="event.EntryType"></div>
             <span class="event-message" style="white-space: pre-wrap;">{{uiEventMessage}}</span>
         </div>
 
-        <!-- Expand - Collapse toggle -->
-        <div class="flex-container togle-container" *ngIf="uiHasBigContent">
-            <span class="toggle" (click)="uiOnToggleClicked()">{{uiShowingAllContent ? 'collapse' : 'expand'}}</span>
+        <!-- Expand button -->
+        <div *ngIf="uiHasBigContent && !uiShowingAllContent" class="flex-container" style="justify-content: flex-end;">
+            <span class="toggle" (click)="uiOnToggleClicked(true)">expand</span>
         </div>
     </div>
 

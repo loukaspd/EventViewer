@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - **[AppLogger]:**: introduce debug instance
 - **[event-viewer]:**: adds debug loging when command execution throws error
+- **[event-viewer] [ui]:**: moves bubble collapse button to top right
 
 ### Fixed
 - **[log-selection]:** event-logs command parsing when thousands separator is '.' instead of ','
