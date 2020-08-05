@@ -1,5 +1,6 @@
 import Shell from 'node-powershell';
 import { GlobalUtils } from '../global-utils';
+import { AppLogger } from '../AppLogger';
 
 
 
@@ -35,7 +36,13 @@ export class PsCommandExecutor {
         .then(() => _ps.addCommand(command))
         .then(() => _ps.invoke())
         .catch(e => {
-            if (!ignoreError) console.error(e);
+            if (!ignoreError) {
+                console.error('The following command threw an error.\n' + command);
+                console.error(e);
+                AppLogger.getDebug().logErrorMessage('The following command threw an error.\n' + command);
+                AppLogger.getDebug().logError(e);
+            }
+
             return '';
         })
         .finally(() => {

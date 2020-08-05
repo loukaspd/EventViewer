@@ -50,7 +50,6 @@ export class PowershellCommands {
         if (computerName) command += ` -ComputerName "${computerName}"`;
         command += ' -List';
 
-        AppLogger.getDebug().logDebug(command);
         return PsCommandExecutor.executeCommand(command, false, 90)
         .then(output => PowershellCommands._parseEventViewersList(output))
         .then(events => {
@@ -96,7 +95,7 @@ export class PowershellCommands {
         //add select part
         command += PowershellCommands._selectEventCommand;
         //execute and parse
-        return PsCommandExecutor.executeCommand(command, true)
+        return PsCommandExecutor.executeCommand(command, lastEvent == null)
         .then(output => PowershellCommands._parseEventsCommandOutput(output));
     }
 
