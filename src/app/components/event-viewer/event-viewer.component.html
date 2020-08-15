@@ -1,34 +1,38 @@
-<div #scrollTarget class="container" style="height: 100%; overflow-y: auto;">
+<div class="container flex-container" style="height: 100%; flex-direction: column;">
 
-    <!-- Title -->
-    <div class="title event-viewer-title">
-        <span># {{eventLog.UiTabLabel()}}</span>
+    <!-- Top Bar-->
+    <div class="top-bar">
+        <!-- Title -->
+        <div class="title event-viewer-title">
+            <span># {{eventLog.UiTabLabel()}}</span>
+        </div>
+
+        <!-- Number of Events-->
+        <div *ngIf="!viewModel.loading && viewModel.countAll > 0">
+            <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
+        </div>
+
+        <!-- Filters - Clear & Refersh Buttons -->
+        <div style="margin-bottom: 10px;" class="flex-container">
+            <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle">
+                <i nz-icon nzType="delete"></i>
+            </button>
+
+            <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle"  class="top-bar-item">
+                <i nz-icon nzType="issues-close"></i>
+            </button>
+            
+            <event-viewer-filters
+            [filters]="filters"
+            (onFiltersChanged)="uiOnFiltersChanged($event)"
+            class="top-bar-item"
+            ></event-viewer-filters>
+        </div>
     </div>
-
-    <!-- Number of Events-->
-    <div *ngIf="!viewModel.loading && viewModel.countAll > 0">
-        <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
-    </div>
-
-    <!-- Filters - Clear & Refersh Buttons -->
-    <div style="margin-bottom: 10px;" class="flex-container">
-        <button (click)="uiOnClearClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle" style="margin-left:5px;">
-            <i nz-icon nzType="delete"></i>
-        </button>
-
-        <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle" style="margin-left:5px;">
-            <i nz-icon nzType="issues-close"></i>
-        </button>
-        
-        <event-viewer-filters
-        [filters]="filters"
-        (onFiltersChanged)="uiOnFiltersChanged($event)"
-        style="margin-left:5px;"
-        ></event-viewer-filters>
-    </div>
+    
 
     <!-- Main List-->
-    <div>
+    <div #scrollTarget style="flex:1; overflow-y: auto;">
         <event-entry-item
         *ngFor="let event of viewModel.events"
         [event]="event">

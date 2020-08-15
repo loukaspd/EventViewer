@@ -1,3 +1,7 @@
+.top-bar-item {
+    margin-left:5px;
+}
+
 .event-viewer-title {
     color: #555459;
     font-size: 1.4rem;
@@ -12,6 +16,8 @@
     line-height: 32px;
 }
 
+
+/* Scroll to Top Button Position */
 :host ::ng-deep .ant-back-top {
     bottom: 10px;
     right: 20px;
