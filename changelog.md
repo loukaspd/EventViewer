@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
-- **[event-viewer] [ui]:** top bar is not scrollable
+- **[event-viewer] [ui]:** top bar position is fixed
+- **[event-viewer] [ui]:** mac-like scrollbar
 
 ### Fixed
 

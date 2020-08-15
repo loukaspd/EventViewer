@@ -1,4 +1,4 @@
-<div class="container flex-container" style="height: 100%; flex-direction: column;">
+<div class="container flex-container" style="height: 100%; flex-direction: column; padding-right: 0;">
 
     <!-- Top Bar-->
     <div class="top-bar">
@@ -32,7 +32,7 @@
     
 
     <!-- Main List-->
-    <div #scrollTarget style="flex:1; overflow-y: auto;">
+    <div #scrollTarget style="flex:1; overflow-y: auto;" class="mac-scrollbar">
         <event-entry-item
         *ngFor="let event of viewModel.events"
         [event]="event">
