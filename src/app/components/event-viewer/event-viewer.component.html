@@ -8,8 +8,8 @@
         </div>
 
         <!-- Number of Events-->
-        <div *ngIf="!viewModel.loading && viewModel.countAll > 0">
-            <p>{{viewModel.countFiltered}}<span *ngIf="viewModel.countAll != viewModel.countFiltered"> Filtered, {{viewModel.countAll}} total</span> Events</p>
+        <div *ngIf="!listVm.loading && listVm.countAll > 0">
+            <p>{{listVm.countFiltered}}<span *ngIf="listVm.countAll != listVm.countFiltered"> Filtered, {{listVm.countAll}} total</span> Events</p>
         </div>
 
         <!-- Filters - Clear & Refersh Buttons -->
@@ -18,9 +18,14 @@
                 <i nz-icon nzType="delete"></i>
             </button>
 
-            <button *ngIf="viewModel.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle"  class="top-bar-item">
+            <button *ngIf="listVm.hasNew"  (click)="uiOnRefreshClicked()" nz-button nzType="primary" [nzSize]="'default'" nzShape="circle"  class="top-bar-item">
                 <i nz-icon nzType="issues-close"></i>
             </button>
+
+            <label nz-checkbox 
+            [(ngModel)]="vm.autoRefresh"
+            class="top-bar-item">
+            auto-refresh</label>
             
             <event-viewer-filters
             [filters]="filters"
@@ -34,20 +39,20 @@
     <!-- Main List-->
     <div #scrollTarget style="flex:1; overflow-y: auto;" class="mac-scrollbar">
         <event-entry-item
-        *ngFor="let event of viewModel.events"
+        *ngFor="let event of listVm.events"
         [event]="event">
         </event-entry-item>
 
         <!-- Load More -->
-        <div class="loadmore" *ngIf="!viewModel.loading && viewModel.hasMore">
+        <div class="loadmore" *ngIf="!listVm.loading && listVm.hasMore">
             <button nz-button (click)="uiOnMoreClicked()">load more</button>
         </div>
     </div>
 
     <!-- Loaders & NoResults -->
-    <nz-spin class="loader" *ngIf="viewModel.loading" nzTip="Loading..." nzSimple [nzSize]="'large'"></nz-spin>
+    <nz-spin class="loader" *ngIf="listVm.loading" nzTip="Loading..." nzSimple [nzSize]="'large'"></nz-spin>
 
-    <nz-empty *ngIf="!viewModel.loading && viewModel.events.length == 0"
+    <nz-empty *ngIf="!listVm.loading && listVm.events.length == 0"
         [nzNotFoundContent]="emptyContent">
         <ng-template #emptyContent>
             <span>No Events</span>

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Pending
 
 ### Added
+- **[event-viewer]:** adds auto-refresh functionality
 
 ### Changed
 - **[event-viewer] [ui]:** top bar position is fixed

@@ -1,5 +1,5 @@
 //#region imports
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Event } from '../../types/Event';
@@ -21,6 +21,7 @@ import { PowershellMonitor } from '../../services/powershell/powershell-monitor'
 export class EventViewerComponent implements OnInit, OnDestroy {
     //#region Constructor & Properties
     constructor(private modalService: NzModalService
+        ,private elementRef: ElementRef
         ,private changeDetRef: ChangeDetectorRef) { }
 
     @Input()
@@ -30,7 +31,8 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     @Output()
     public unreadEventsUpdated = new EventEmitter<number>();
 
-    public viewModel= new ViewModel();
+    public vm= new ViewModel();
+    public listVm= new ListViewModel();
     public filters= new EventFiltersVm();
     public sources: string[]= [];
 
@@ -43,7 +45,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
 
     //#region Angular Methods
     ngOnInit(): void {
-        this.viewModel.loading = true;
+        this.listVm.loading = true;
         this.changeDetRef.markForCheck();
         
         this._monitor = new PowershellMonitor(this.eventLog);
@@ -70,10 +72,10 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     //#region Implementation
 
     private _showNextItems(): void {
-        const elements2show = Math.min(this.viewModel.events.length + Constants.PageNumber, this._events.length);
-        this.viewModel.events = this._events.slice(0,elements2show);
+        const elements2show = Math.min(this.listVm.events.length + Constants.PageNumber, this._events.length);
+        this.listVm.events = this._events.slice(0,elements2show);
 
-        this.viewModel.hasMore = this.viewModel.events.length < this._events.length;
+        this.listVm.hasMore = this.listVm.events.length < this._events.length;
         this.changeDetRef.markForCheck();
     }
 
@@ -81,10 +83,10 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         this._events = this.filters.isEmpty() ? [...this._allEvents]
         : this._allEvents.filter(e => this.filters.eventPassesFilters(e));
         // initialize ui variables
-        this.viewModel = new ViewModel();
+        this.listVm = new ListViewModel();
         this.unreadEventsUpdated.emit(0);
-        this.viewModel.countAll = this._allEvents.length;
-        this.viewModel.countFiltered = this._events.length;
+        this.listVm.countAll = this._allEvents.length;
+        this.listVm.countFiltered = this._events.length;
         // get data
         this._showNextItems();
     }
@@ -101,8 +103,11 @@ export class EventViewerComponent implements OnInit, OnDestroy {
         const newEventsWithFilters = this.filters.isEmpty() || !!newEvents.find(e => this.filters.eventPassesFilters(e));
         if (!newEventsWithFilters) return;
         //notify ui
-        this.viewModel.hasNew = true;
+        this.listVm.hasNew = true;
         this.unreadEventsUpdated.emit(this._allEvents.length - this._events.length);
+        if (this.vm.autoRefresh && this.isComponentVisible()) {
+            this._refreshList();
+        }
         this.changeDetRef.markForCheck();
     }
 
@@ -112,6 +117,10 @@ export class EventViewerComponent implements OnInit, OnDestroy {
             this._allEvents = [];
             this._refreshList();
         });
+    }
+
+    private isComponentVisible(): boolean {
+        return this.elementRef.nativeElement.offsetParent != null;
     }
     //#endregion Implementation
 
@@ -149,7 +158,7 @@ export class EventViewerComponent implements OnInit, OnDestroy {
     //#endregion UiCallbacks
 }
 
-class ViewModel {
+class ListViewModel {
     public loading: boolean = false;
     public hasNew: boolean = false;
     //Counters
@@ -162,4 +171,9 @@ class ViewModel {
     constructor(events?: Event[]) {
         this.events = events || [];
     }
+}
+
+class ViewModel {
+    // Buttons
+    public autoRefresh: boolean = false; 
 }
