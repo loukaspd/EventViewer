@@ -7,7 +7,7 @@
             <h5 [ngClass]="filter">{{filter}}</h5>
             <img 
             (click)="UiOnRemoveClicked(filter)"
-            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+            src="./assets/icons/close-window-black.png"/>
         </li>
         
         <li *ngIf="!!filters.searchTerm"
@@ -15,7 +15,7 @@
             <h5>{{filters.searchTerm}}</h5>
             <img 
             (click)="UiOnRemoveSearchClicked()"
-            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+            src="./assets/icons/close-window-black.png"/>
         </li>
         
         <li *ngIf="!!filters.dateFrom"
@@ -23,7 +23,7 @@
             <h5>{{filters.dateFrom | date:'yyyy-MM-dd HH:mm'}}</h5>
             <img 
             (click)="UiOnRemoveDateFrom()"
-            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+            src="./assets/icons/close-window-black.png"/>
         </li>
         
         <li *ngIf="!!filters.dateTo"
@@ -31,7 +31,7 @@
             <h5>{{filters.dateTo | date:'yyyy-MM-dd HH:mm'}}</h5>
             <img 
             (click)="UiOnRemoveDateTo()"
-            src="https://img.icons8.com/carbon-copy/100/000000/close-window.png"/>
+            src="./assets/icons/close-window-black.png"/>
         </li>
     </ul>
 

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - **[event-viewer] [ui]:** top bar position is fixed
 - **[event-viewer] [ui]:** mac-like scrollbar
+- **[ui]:** images are included in the app
 
 ### Fixed
 

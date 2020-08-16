@@ -1,7 +1,7 @@
 <div>
     <div class="title-container container">
         <span>Event Logs</span>
-        <img (click)="uiOnAddClicked()" id="add-btn" src="https://img.icons8.com/ios/50/ab9ba9/add.png"/>
+        <img (click)="uiOnAddClicked()" id="add-btn" src="./assets/icons/add-circle-white.png"/>
     </div>
 
     <ul id="event-logs-ul">
@@ -13,7 +13,7 @@
         <div class="flex-container">
             <span class="sidebar-name">{{eventLog.UiTabLabel()}}</span>
             <span *ngIf="newEventsCount[i] > 0" class="sidebar-unread-badge">{{newEventsCount[i]}}</span>
-            <img (click)="uiOnCloseClicked(i)" class="sidebar-close-icon" src="https://img.icons8.com/ios/26/ab9ba9/delete-sign.png"/>
+            <img (click)="uiOnCloseClicked(i)" class="sidebar-close-icon" src="./assets/icons/delete-sign-white.png"/>
         </div>
         </li>
     </ul>
