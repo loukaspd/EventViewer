@@ -38,7 +38,7 @@ export class EventViewerFiltersComponent {
             this.dropdownSources = [...changes.availableSources.currentValue];
         }
 
-        const newFilters = (changes.filters || {}).currentValue;
+        const newFilters = changes.filters != null ? changes.filters.currentValue : null;
         if (newFilters == null) return;
         
         this.dropdownSources = this.availableSources.filter(sc => newFilters.sources.indexOf(sc) < 0);
