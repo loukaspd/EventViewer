@@ -5,10 +5,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-## Pending
+## [0.2.1] 2020/08/25
 
 ### Added
 - **[event-viewer]:** adds auto-refresh functionality
+- **[event-viewer]:** adds source to filters
 
 ### Changed
 - **[event-viewer] [ui]:** top bar position is fixed

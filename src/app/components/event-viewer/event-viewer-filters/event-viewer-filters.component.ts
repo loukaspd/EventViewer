@@ -16,7 +16,11 @@ export class EventViewerFiltersComponent {
     onFiltersChanged: EventEmitter<EventFiltersVm> = new EventEmitter<EventFiltersVm>();
     @Input()
     public filters: EventFiltersVm;
+    @Input()
+    public availableSources: string[];
 
+    public dropdownSources: string[] = [];
+    public sourceModel: string = null;
     public filterDateFrom: Date = null;
     public filterDateTo: Date = null;
     public filterText: string = '';
@@ -30,9 +34,17 @@ export class EventViewerFiltersComponent {
 
     //#region Component Methods
     ngOnChanges(changes: SimpleChanges) {
-        this.filterText = changes.filters.currentValue.searchTerm;
-        this.filterDateFrom = changes.filters.currentValue.dateFrom;
-        this.filterDateTo = changes.filters.currentValue.dateTo;
+        if (changes.availableSources && changes.availableSources.currentValue) {
+            this.dropdownSources = [...changes.availableSources.currentValue];
+        }
+
+        const newFilters = (changes.filters || {}).currentValue;
+        if (newFilters == null) return;
+        
+        this.dropdownSources = this.availableSources.filter(sc => newFilters.sources.indexOf(sc) < 0);
+        this.filterText = newFilters.searchTerm;
+        this.filterDateFrom = newFilters.dateFrom;
+        this.filterDateTo = newFilters.dateTo;
     }
     //#endregion Component Methods
 
@@ -59,6 +71,12 @@ export class EventViewerFiltersComponent {
         this.onFiltersChanged.emit(this.filters);
     }
 
+    public UiOnRemoveSourceClicked(source: string): void {
+        this.filters.sources = this.filters.sources
+        .filter(sc => sc.indexOf(source) < 0);
+        this.onFiltersChanged.emit(this.filters);
+    }
+
     public UiOnRemoveSearchClicked(): void {
         this.filters.searchTerm = '';
         this.onFiltersChanged.emit(this.filters);
@@ -79,6 +97,14 @@ export class EventViewerFiltersComponent {
         this.filters.dateFrom = this.filterDateFrom;
         this.filters.dateTo = this.filterDateTo;
         this.onFiltersChanged.emit(this.filters);
+    }
+
+    public UiOnSourcesChanged(): void {
+        this.filters.sources.push(this.sourceModel);
+        this.onFiltersChanged.emit(this.filters);
+        // UI
+        this.filtersVisible = false;
+        setTimeout(() => {this.sourceModel = null;}, 700);
     }
 
     //Hide filtes when a date is cleared

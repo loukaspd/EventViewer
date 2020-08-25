@@ -14,7 +14,7 @@ export class EventFiltersVm {
             this.dateFrom = instance.dateFrom;
             this.dateTo = instance.dateTo;
             this.searchTerm = instance.searchTerm;
-            this.sources = [...instance.sources];
+            this.sources = instance.sources ? [...instance.sources] : [];
         }
     }
 

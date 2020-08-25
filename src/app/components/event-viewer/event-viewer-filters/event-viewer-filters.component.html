@@ -9,6 +9,15 @@
             (click)="UiOnRemoveClicked(filter)"
             src="./assets/icons/close-window-black.png"/>
         </li>
+        <!-- sources -->
+        <li
+        *ngFor="let source of filters.sources" 
+        class="filters-selected-item">
+            <h5>{{source}}</h5>
+            <img 
+            (click)="UiOnRemoveSourceClicked(source)"
+            src="./assets/icons/close-window-black.png"/>
+        </li>
         
         <li *ngIf="!!filters.searchTerm"
         class="filters-selected-item">
@@ -35,6 +44,7 @@
         </li>
     </ul>
 
+
     <!-- Add Filter -->
     <button nz-button nz-dropdown [nzDropdownMenu]="menu"
     nzClickHide="true"
@@ -52,6 +62,18 @@
         class="event-type-indicator" 
         [ngClass]="eventType">{{eventType}}</li>
         <li nz-menu-divider></li>
+        <!-- Sources -->
+        <nz-input-group *ngIf="dropdownSources.length > 1">
+            <nz-select
+                nzPlaceHolder="Sources"
+                [(ngModel)]="sourceModel"
+                (ngModelChange)="UiOnSourcesChanged()"
+                style="width: 100%;"
+                >
+                <nz-option *ngFor="let item of dropdownSources" [nzLabel]="item" [nzValue]="item">
+                </nz-option>
+            </nz-select>
+        </nz-input-group>
         <!-- Search Input -->
         <nz-input-group [nzAddOnAfter]="suffixButton">
             <input type="text" nz-input placeholder="Search Message" id="searchInput" [(ngModel)]="filterText"/>

@@ -29,6 +29,7 @@
             
             <event-viewer-filters
             [filters]="filters"
+            [availableSources]="sources"
             (onFiltersChanged)="uiOnFiltersChanged($event)"
             class="top-bar-item"
             ></event-viewer-filters>
