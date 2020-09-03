@@ -7,6 +7,8 @@ import { map, debounceTime } from 'rxjs/operators';
 import { PowershellCommands } from '../../../services/powershell/powershell-commands';
 import { GlobalUtils } from '../../../services/global-utils';
 import { AppLogger } from '../../../services/AppLogger';
+import { AppDatabase } from '../../../services/AppDatabase';
+import { DbEventLog } from '../../../types/database/DbEventLog';
 //#endregion imports
 
 @Component({
@@ -32,6 +34,7 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
 
     public loading: boolean= true;
     private _logers: EventLog[] = [];
+    private _dbLoggers: DbEventLog[] = [];
     public logers: EventLog[] = [];
     private _searchValue: string = '';
     public remoteComputer: string = '';
@@ -40,6 +43,7 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
 
     //#region Component Methods
     ngOnInit(): void {
+        AppDatabase.getInstance().getAllLoggs().then(items => this._dbLoggers = items);
         this._search();
         this._setupSearch();
     }
@@ -76,7 +80,9 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
         this.loading = true;
         PowershellCommands.getEventLogs(this.remoteComputer)
         .then((evs: EventLog[]) => {
-            this._logers = evs;
+            this._logers = evs
+                .map(logger => this._dbLoggers.find(dbLogger => dbLogger.IsSame(logger)) || logger)
+                .sort((it1, it2) => it1.isFavorite == it2.isFavorite ? 0 : (it1.isFavorite ? -1 : 1));
             this.loading = false;
             this._applyFiltering();
         })
@@ -145,6 +151,25 @@ export class LogSelectionComponent implements OnInit, OnDestroy {
             });
         });
     }
-    //#endregion UiCallbacks
+
+    public UiOnFavoriteClicked(item: EventLog): void {
+        const dbItem = new DbEventLog(item);
+        dbItem.isFavorite = !item.isFavorite;
+        
+        AppDatabase
+            .getInstance()
+            .upsertItem(dbItem)
+            .then((res :boolean) => {
+                if (!res) return;
+
+                item.isFavorite = !item.isFavorite;
+                if (this._dbLoggers.find(dbLogger => dbLogger.IsSame(dbItem)) == null) {
+                    this._dbLoggers.push(dbItem);
+                }
+                else {
+                    this._dbLoggers = this._dbLoggers.map(logger => logger.IsSame(dbItem) ? dbItem : logger);
+                }
+            });
+    }
 
 }

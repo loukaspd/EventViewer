@@ -23,7 +23,13 @@
     [nzLoading]="loading"
 >
     <ng-template #itemRef let-item>
-        <li nz-list-item [nzActions]="[deleteAction, selectAction]" [nzContent]="item.log + ' ('+ item.entries +')'" nzNoFlex></li>
+        <li nz-list-item [nzActions]="[favorite, deleteAction, selectAction]" [nzContent]="item.log + ' ('+ item.entries +')'" nzNoFlex></li>
+        <ng-template #favorite>
+            <img 
+            (click)="UiOnFavoriteClicked(item)" 
+            [src]="item.isFavorite ? './assets/icons/star-filled.png': './assets/icons/star-empty.png'"
+            style="width: 20px; height: 20px;"/>
+        </ng-template>
         <ng-template #deleteAction><a (click)="UiOnRemoveItemClicked(item)" style="color: #E89999;">remove</a></ng-template>
         <ng-template #selectAction><a (click)="UiOnItemSelected(item)">select</a></ng-template>
     </ng-template>

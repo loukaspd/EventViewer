@@ -3,6 +3,18 @@ export class EventLog {
 
     public log: string;
     public entries: number;
+    public friendlyName: string;
+    public isFavorite: boolean;
+
+    constructor(instance? :EventLog) {
+        if (instance != null) {
+            this.computerName = instance.computerName;
+            this.log = instance.log;
+            this.entries = instance.entries;
+            this.friendlyName = instance.friendlyName;
+            this.isFavorite = instance.isFavorite;
+        }
+    }
 
     //#region Ui Methods
     public UiTabLabel(): string {

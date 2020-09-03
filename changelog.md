@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.2.2] PENDING
 
 ### Added
+- **[Packages]:** addsdb package
+- **[log-selection]:** add add-to-favorites funcionality
 
 ### Changed
 - **[app-window]:** moves app window to the center of the screen

@@ -80,9 +80,11 @@
     "node": ">=10.9.0"
   },
   "dependencies": {
+    "@types/pouchdb": "^6.4.0",
     "electron-log": "^4.2.2",
     "electron-updater": "^4.1.2",
     "ng-zorro-antd": "^8.3.1",
-    "node-powershell": "^4.0.0"
+    "node-powershell": "^4.0.0",
+    "pouchdb": "^7.2.2"
   }
 }
